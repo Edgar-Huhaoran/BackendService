@@ -1,4 +1,4 @@
-package com.hyrax.backend.jdbc;
+package com.hyrax.backend.dbconfig;
 
 import com.carbonfive.db.migration.DataSourceMigrationManager;
 import com.carbonfive.db.migration.ResourceMigrationResolver;

@@ -1,0 +1,43 @@
+package com.hyrax.backend.exception;
+
+import org.springframework.http.HttpStatus;
+
+public enum ErrorType {
+
+    USER_NAME_NULL(HttpStatus.BAD_REQUEST, 4001, "user name can't be null", "用户名不能为空"),
+    USER_NAME_EXISTS(HttpStatus.BAD_REQUEST, 4002, "user name already exists", "用户名已存在"),
+    USER_NAME_NOT_EXISTS(HttpStatus.BAD_REQUEST, 4003, "user name does not exists", "用户名不存在"),
+    PASSWORD_NULL(HttpStatus.BAD_REQUEST, 4004, "password can't be null", "密码不能为空"),
+    PASSWORD_ILLEGAL(HttpStatus.BAD_REQUEST, 4005, "password is illegal", "密码不符合要求"),
+    PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, 4006, "password incorrect", "密码不正确"),
+
+    UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "unknown internal server error", "服务器未知错误");
+
+    private final HttpStatus status;
+    private final int errorCode;
+    private final String detailMessage;
+    private final String clinetMessage;
+
+    ErrorType(HttpStatus status, int errorCode, String detailMessage, String clientMessage) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.detailMessage = detailMessage;
+        this.clinetMessage = clientMessage;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public String getDetailMessage() {
+        return detailMessage;
+    }
+
+    public String getClinetMessage() {
+        return clinetMessage;
+    }
+}
