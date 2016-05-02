@@ -38,6 +38,10 @@ public class UserService {
         userDAO.save(user);
     }
 
+    public void login(UserDTO userDTO) {
+
+    }
+
     private void registerValidate(UserDTO userDTO) {
         String userName = userDTO.getUserName();
         if (userName == null || userName.isEmpty()) {
