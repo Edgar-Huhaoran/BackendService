@@ -2,6 +2,7 @@ package com.hyrax.backend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hyrax.backend.credential.UserToken;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 @Service
 public class UserTokenService {
@@ -48,7 +50,7 @@ public class UserTokenService {
 
     public String createUserToken(String userName) {
         Timestamp validTime = new Timestamp(System.currentTimeMillis() + seconds * 1000);
-        TokenUser tokenUser = TokenUser.newInstance().withUserName(userName).withValidTime(validTime);
+        UserToken tokenUser = UserToken.newInstance().withUserName(userName).withValidTime(validTime);
 
         byte[] tokenBody = toJson(tokenUser);
         byte[] tokenHmac = createHmac(tokenBody);
@@ -61,17 +63,21 @@ public class UserTokenService {
     }
 
     public String parseUserToken(String token) {
-        String[] parts = token.split(SEPARATOR);
+        String[] parts = token.split(Pattern.quote(SEPARATOR));
         if (parts.length == 2 && parts[0].length() > 0 && parts[1].length() > 0) {
             byte[] tokenBody = fromBase64(parts[0]);
             byte[] tokenHmac = fromBase64(parts[1]);
 
             boolean isValidHmac = Arrays.equals(createHmac(tokenBody), tokenHmac);
             if (isValidHmac) {
-                TokenUser tokenUser = fromJson(tokenBody);
-                boolean isValidTime = new Timestamp(System.currentTimeMillis()).after(tokenUser.getValidTime());
+                UserToken userToken = fromJson(tokenBody);
+                boolean isValidTime = new Timestamp(System.currentTimeMillis()).before(userToken.getValidTime());
                 if (isValidTime) {
-                    return tokenUser.getUserName();
+                    String userName = userToken.getUserName();
+                    if (userName == null) {
+                        throw new HyraxException(ErrorType.TOKEN_INVALID);
+                    }
+                    return userName;
                 }
                 throw new HyraxException(ErrorType.TOKEN_EXPIRED);
             }
@@ -79,7 +85,7 @@ public class UserTokenService {
         throw new HyraxException(ErrorType.TOKEN_INVALID);
     }
 
-    private byte[] toJson(TokenUser tokenUser) {
+    private byte[] toJson(UserToken tokenUser) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsBytes(tokenUser);
@@ -88,12 +94,12 @@ public class UserTokenService {
         }
     }
 
-    private TokenUser fromJson(byte[] bytes) {
+    private UserToken fromJson(byte[] bytes) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(bytes, TokenUser.class);
+            return mapper.readValue(bytes, UserToken.class);
         } catch (IOException e) {
-            throw new IllegalArgumentException("generate TokenUser failed", e);
+            throw new IllegalArgumentException("generate UserToken failed", e);
         }
     }
 
@@ -107,42 +113,6 @@ public class UserTokenService {
 
     private byte[] fromBase64(String encoded) {
         return Base64.getDecoder().decode(encoded);
-    }
-
-    // inner class for generate user token
-    private static class TokenUser {
-        private String userName;
-        private Timestamp validTime;
-
-        public static TokenUser newInstance() {
-            return new TokenUser();
-        }
-
-        public Timestamp getValidTime() {
-            return validTime;
-        }
-
-        public void setValidTime(Timestamp validTime) {
-            this.validTime = validTime;
-        }
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public void setUserName(String userName) {
-            this.userName = userName;
-        }
-
-        public TokenUser withUserName(String userName) {
-            this.setUserName(userName);
-            return this;
-        }
-
-        public TokenUser withValidTime(Timestamp validTime) {
-            this.setValidTime(validTime);
-            return this;
-        }
     }
 
 }

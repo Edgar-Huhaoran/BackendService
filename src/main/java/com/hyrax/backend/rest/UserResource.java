@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @Path("user")
@@ -30,7 +32,10 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHyraxStatus() {
         String hyraxStatus = "Hyrax with be the best! " + new Timestamp(System.currentTimeMillis()).toString();
-        return Response.ok(hyraxStatus).build();
+
+        Map statusMap = new HashMap<>();
+        statusMap.put("status", hyraxStatus);
+        return Response.ok(statusMap).build();
     }
 
     @POST
@@ -44,9 +49,13 @@ public class UserResource {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response login(UserDTO userDTO) {
         String token = userService.login(userDTO);
-        return Response.ok(token).build();
+
+        Map tokenMap = new HashMap<>();
+        tokenMap.put("userToken", token);
+        return Response.ok(tokenMap).build();
     }
 
 }
