@@ -45,8 +45,8 @@ public class UserResource {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(UserDTO userDTO) {
-        System.out.println(userDTO.getUserName());
-        return Response.ok().build();
+        String token = userService.login(userDTO);
+        return Response.ok(token).build();
     }
 
 }

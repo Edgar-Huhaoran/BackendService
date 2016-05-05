@@ -11,6 +11,10 @@ public enum ErrorType {
     PASSWORD_ILLEGAL(HttpStatus.BAD_REQUEST, 4005, "password is illegal", "密码不符合要求"),
     PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, 4006, "password incorrect", "密码不正确"),
 
+    TOKEN_NOT_EXISTS(HttpStatus.FORBIDDEN, 4031, "user token do not exists", "token不存在"),
+    TOKEN_INVALID(HttpStatus.FORBIDDEN, 4032, "user token is invalid", "token无效"),
+    TOKEN_EXPIRED(HttpStatus.FORBIDDEN, 4033, "user token is expired", "token过期"),
+
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "unknown internal server error", "服务器未知错误");
 
     private final HttpStatus status;
