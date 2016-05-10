@@ -31,8 +31,7 @@ public class UserResource {
     @Path("/hyrax")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHyraxStatus() {
-        String hyraxStatus = "Hyrax with be the best! " + new Timestamp(System.currentTimeMillis()).toString();
-
+        String hyraxStatus = "Hyrax will be the best! " + new Timestamp(System.currentTimeMillis()).toString();
         Map statusMap = new HashMap<>();
         statusMap.put("status", hyraxStatus);
         return Response.ok(statusMap).build();
@@ -52,7 +51,6 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(UserDTO userDTO) {
         String token = userService.login(userDTO);
-
         Map tokenMap = new HashMap<>();
         tokenMap.put("userToken", token);
         return Response.ok(tokenMap).build();

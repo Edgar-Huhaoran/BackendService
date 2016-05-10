@@ -13,6 +13,7 @@ public class JerseyConfig extends ResourceConfig {
         // Resource Register
         register(StatusResource.class);
         register(UserResource.class);
+        register(VehicleResource.class);
 
         // Filter Register
         register(UserContextFilter.class);
