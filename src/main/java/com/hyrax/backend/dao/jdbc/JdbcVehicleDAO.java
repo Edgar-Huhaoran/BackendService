@@ -64,6 +64,14 @@ public class JdbcVehicleDAO implements VehicleDAO {
         return vehicleList;
     }
 
+    public int delete(UUID id) {
+        String sql = "DELETE FROM vehicle WHERE id = :id";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        int rows = namedTemplate.update(sql, parameterSource);
+        return rows;
+    }
 
     private static final RowMapper<Vehicle> VEHICLE_ROW_MAPPER = new RowMapper<Vehicle>() {
         public Vehicle mapRow(ResultSet rs, int rowNum) throws SQLException {

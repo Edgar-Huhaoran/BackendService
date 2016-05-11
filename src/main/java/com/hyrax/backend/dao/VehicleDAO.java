@@ -13,4 +13,6 @@ public interface VehicleDAO {
 
     List<Vehicle> getByUserName(String userName);
 
+    int delete(UUID id);
+
 }

@@ -46,7 +46,6 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
             log.info("skip request filter, url {} ", requestContext.getUriInfo().getAbsolutePath());
             return;
         }
-        log.info("filter request, url {} ", requestContext.getUriInfo().getAbsolutePath());
 
         String userToken = requestContext.getHeaderString(USER_TOKEN_HEADER);
         if (userToken == null || userToken.isEmpty()) {
@@ -56,6 +55,8 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
         String userName = userTokenService.parseUserToken(userToken);
         UserContext userContext = new UserContext(userName);
         UserContextHolder.setContext(userContext);
+        log.info("filter request, url {}, userName: {} ", requestContext.getUriInfo().getAbsolutePath(),
+                UserContextHolder.getUserName());
     }
 
     @Override
@@ -64,7 +65,8 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
             log.info("skip response filter, url {} ", requestContext.getUriInfo().getAbsolutePath());
             return;
         }
-        log.info("filter response, url {} ",  requestContext.getUriInfo().getAbsolutePath());
+        log.info("filter response, url {}, userName: {} ",  requestContext.getUriInfo().getAbsolutePath(),
+                UserContextHolder.getUserName());
 
         UserContextHolder.clearContext();
     }

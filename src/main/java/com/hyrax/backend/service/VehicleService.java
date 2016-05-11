@@ -2,8 +2,10 @@ package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleDAO;
+import com.hyrax.backend.dao.VehicleStatusDAO;
 import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.Vehicle;
+import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,10 +23,12 @@ public class VehicleService {
     private static final Logger log = LoggerFactory.getLogger(VehicleService.class);
 
     private final VehicleDAO vehicleDAO;
+    private final VehicleStatusDAO vehicleStatusDAO;
 
     @Autowired
-    public VehicleService(VehicleDAO vehicleDAO) {
+    public VehicleService(VehicleDAO vehicleDAO, VehicleStatusDAO vehicleStatusDAO) {
         this.vehicleDAO = vehicleDAO;
+        this.vehicleStatusDAO = vehicleStatusDAO;
     }
 
     public UUID createVehicle(VehicleDTO vehicleDTO) {
@@ -45,6 +50,43 @@ public class VehicleService {
                 .withModifyTime(new Timestamp(System.currentTimeMillis()));
         vehicleDAO.save(vehicle);
         return id;
+    }
+
+    public List<Vehicle> getVehicles() {
+        String userName = UserContextHolder.getUserName();
+        return vehicleDAO.getByUserName(userName);
+    }
+
+    public VehicleStatus getVehicleStatus(UUID id) {
+        if (id == null) {
+            throw new HyraxException(ErrorType.ID_NULL);
+        }
+
+        String userName = UserContextHolder.getUserName();
+        List<VehicleStatus> vehicleStatusList = vehicleStatusDAO.getByUserName(userName);
+        for (VehicleStatus vehicleStatus : vehicleStatusList) {
+            if (id.equals(vehicleStatus.getId())) {
+                return vehicleStatus;
+            }
+        }
+
+        return null;
+    }
+
+    public int deleteVehicle(UUID id) {
+        if (id == null) {
+            throw new HyraxException(ErrorType.ID_NULL);
+        }
+
+        String userName = UserContextHolder.getUserName();
+        List<Vehicle> vehicleList = vehicleDAO.getByUserName(userName);
+        for (Vehicle vehicle : vehicleList) {
+            if (id.equals(vehicle.getId())) {
+                return vehicleDAO.delete(id);
+            }
+        }
+
+        return 0;
     }
 
     private void assertValid(VehicleDTO vehicleDTO) {
