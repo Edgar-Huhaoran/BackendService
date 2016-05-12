@@ -1,4 +1,4 @@
-package com.hyrax.backend.dbconfig;
+package com.hyrax.backend.config;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;

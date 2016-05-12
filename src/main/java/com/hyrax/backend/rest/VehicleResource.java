@@ -4,6 +4,7 @@ import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.service.VehicleService;
+import com.hyrax.backend.service.VehicleStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,10 +27,12 @@ import java.util.UUID;
 public class VehicleResource {
 
     private final VehicleService vehicleService;
+    private final VehicleStatusService vehicleStatusService;
 
     @Autowired
-    public VehicleResource(VehicleService vehicleService) {
+    public VehicleResource(VehicleService vehicleService, VehicleStatusService vehicleStatusService) {
         this.vehicleService = vehicleService;
+        this.vehicleStatusService = vehicleStatusService;
     }
 
     @GET
@@ -53,7 +56,7 @@ public class VehicleResource {
     @Path("{vehicleId}/status")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVehicleStatus(@PathParam("vehicleId") UUID id) {
-        VehicleStatus vehicleStatus = vehicleService.getVehicleStatus(id);
+        VehicleStatus vehicleStatus = vehicleStatusService.getVehicleStatus(id);
         return Response.ok(vehicleStatus).build();
     }
 
