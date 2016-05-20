@@ -1,4 +1,4 @@
-package com.hyrax.backend.rest;
+package com.hyrax.backend.resource;
 
 import org.springframework.stereotype.Controller;
 

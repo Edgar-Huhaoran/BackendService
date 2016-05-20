@@ -1,7 +1,10 @@
-package com.hyrax.backend.rest;
+package com.hyrax.backend.config;
 
 import com.hyrax.backend.exception.HyraxMapper;
 import com.hyrax.backend.filter.UserContextFilter;
+import com.hyrax.backend.resource.StatusResource;
+import com.hyrax.backend.resource.UserResource;
+import com.hyrax.backend.resource.VehicleResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 

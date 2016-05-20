@@ -1,4 +1,4 @@
-package com.hyrax.backend.rest;
+package com.hyrax.backend.resource;
 
 import com.hyrax.backend.dto.UserDTO;
 import com.hyrax.backend.service.UserService;
