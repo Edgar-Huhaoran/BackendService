@@ -8,6 +8,7 @@ import com.hyrax.backend.service.UserTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -24,19 +25,17 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
     private static final Logger log = LoggerFactory.getLogger(UserContextFilter.class);
 
     private static final String USER_TOKEN_HEADER = "X-Hyrax-UserToken";
-    private static final String REGISTER_PATH = "user/register";
-    private static final String LOGIN_PATH = "user/login";
-    private static final String HYRAX_PATH = "status/hyrax";
-    private static final List<String> excludePath = new ArrayList<String>();
 
+    private final List<String> excludePath;
+    private final String excludePostFix;
     private final UserTokenService userTokenService;
 
     @Autowired
-    public UserContextFilter(UserTokenService userTokenService) {
-        excludePath.add(REGISTER_PATH);
-        excludePath.add(LOGIN_PATH);
-        excludePath.add(HYRAX_PATH);
-
+    public UserContextFilter(@Value("#{'${context.exclude.paths}'.split(',')}") List<String> excludePath,
+                             @Value("${context.exclude.postFix}") String excludePostFix,
+                             UserTokenService userTokenService) {
+        this.excludePath = excludePath;
+        this.excludePostFix = excludePostFix;
         this.userTokenService = userTokenService;
     }
 
@@ -76,6 +75,12 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
         if (excludePath.contains(path)) {
             return false;
         }
+
+        String parts[] = path.split("/");
+        if (excludePostFix != null && excludePostFix.equals(parts[parts.length - 1])) {
+            return false;
+        }
+
         return true;
     }
 

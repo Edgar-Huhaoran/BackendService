@@ -19,7 +19,7 @@ public class ScheduleConfig {
 
     @Scheduled(fixedDelay = 1000)
     public void checkVehicleStatus() {
-        log.info("check vehicle status");
+        log.debug("check vehicle status");
         vehicleStatusService.checkVehicleStatus();
     }
 
