@@ -56,7 +56,7 @@ public class JdbcVehicleDAO implements VehicleDAO {
     }
 
     public List<Vehicle> getByUserName(String userName) {
-        String sql = "SELECT * FROM vehicle WHERE user_name = :user_name";
+        String sql = "SELECT * FROM vehicle WHERE user_name = :user_name ORDER BY create_time DESC";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("user_name", userName);
 
