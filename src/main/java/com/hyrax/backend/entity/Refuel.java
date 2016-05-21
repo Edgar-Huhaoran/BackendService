@@ -10,8 +10,8 @@ public class Refuel {
     private UUID id;
     private String userName;
     private String ownerName;
-    private Timestamp from;
-    private Timestamp to;
+    private Timestamp fromTime;
+    private Timestamp toTime;
     private String stationId;
     private String stationName;
     private String fuelType;
@@ -52,20 +52,20 @@ public class Refuel {
         this.ownerName = ownerName;
     }
 
-    public Timestamp getFrom() {
-        return from;
+    public Timestamp getFromTime() {
+        return fromTime;
     }
 
-    public void setFrom(Timestamp from) {
-        this.from = from;
+    public void setFromTime(Timestamp fromTime) {
+        this.fromTime = fromTime;
     }
 
-    public Timestamp getTo() {
-        return to;
+    public Timestamp getToTime() {
+        return toTime;
     }
 
-    public void setTo(Timestamp to) {
-        this.to = to;
+    public void setToTime(Timestamp toTime) {
+        this.toTime = toTime;
     }
 
     public String getStationId() {
@@ -149,13 +149,13 @@ public class Refuel {
         return this;
     }
 
-    public Refuel withFrom(Timestamp from) {
-        this.setFrom(from);
+    public Refuel withFromTime(Timestamp fromTime) {
+        this.setFromTime(fromTime);
         return this;
     }
 
-    public Refuel withTo(Timestamp to) {
-        this.setTo(to);
+    public Refuel withToTime(Timestamp toTime) {
+        this.setToTime(toTime);
         return this;
     }
 
