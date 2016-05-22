@@ -1,34 +1,15 @@
 package com.hyrax.backend.dto;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 public class RefuelDTO {
 
-    private UUID id;
-    private String userName;
     private String ownerName;
     private Timestamp fromTime;
     private Timestamp toTime;
     private String stationId;
     private String stationName;
     private String fuelType;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getOwnerName() {
         return ownerName;

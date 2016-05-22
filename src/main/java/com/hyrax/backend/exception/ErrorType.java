@@ -12,6 +12,7 @@ public enum ErrorType {
     PASSWORD_INCORRECT(HttpStatus.BAD_REQUEST, 4006, "password incorrect", "密码不正确"),
     VEHICLE_INFO_INVALID(HttpStatus.BAD_REQUEST, 4007, "vehicle information is invalid", "车辆信息不合法"),
     ID_NULL(HttpStatus.BAD_REQUEST, 4008, "id can't be null", "ID不能为空"),
+    REFUEL_APPOINT_ILLEGAL(HttpStatus.BAD_REQUEST, 4009, "refuel appointment is illegal", "加油预约参数不合法"),
 
     TOKEN_NOT_EXISTS(HttpStatus.FORBIDDEN, 4031, "user token do not exists", "token不存在"),
     TOKEN_INVALID(HttpStatus.FORBIDDEN, 4032, "user token is invalid", "token无效"),
