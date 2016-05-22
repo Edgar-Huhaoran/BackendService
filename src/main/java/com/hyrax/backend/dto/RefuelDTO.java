@@ -58,4 +58,10 @@ public class RefuelDTO {
     public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
     }
+
+    @Override
+    public String toString() {
+        return "ownerName:" + ownerName + " fromTime:" + fromTime + " toTime:" + toTime
+                + " stationId:" + stationId + " stationName:" + stationName + " fuelType:" + fuelType;
+    }
 }

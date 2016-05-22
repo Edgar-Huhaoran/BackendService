@@ -29,6 +29,7 @@ public class RefuelService {
     }
 
     public UUID appointRefuel(RefuelDTO refuelDTO) {
+        log.info("appoint refuel {}", refuelDTO);
         verifyAppoint(refuelDTO);
 
         UUID id = UUID.randomUUID();
@@ -50,6 +51,7 @@ public class RefuelService {
 
     public List<Refuel> getRefuels() {
         String userName = UserContextHolder.getUserName();
+        log.info("get refuels for user:{}", userName);
         return refuelDAO.getByUserName(userName);
     }
 
