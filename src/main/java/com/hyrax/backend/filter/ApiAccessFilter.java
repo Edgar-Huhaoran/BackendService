@@ -21,12 +21,15 @@ public class ApiAccessFilter implements ContainerRequestFilter {
 
     private final boolean enableTestApi;
     private final String testApiPrefix;
+    private final String testApiPostfix;
 
     @Autowired
     public ApiAccessFilter(@Value("${testApi.enable}") boolean enableTestApi,
-                           @Value("${testApi.prefix}") String testApiPrefix) {
+                           @Value("${testApi.prefix}") String testApiPrefix,
+                           @Value("${testApi.postfix}") String testApiPostfix) {
         this.enableTestApi = enableTestApi;
         this.testApiPrefix = testApiPrefix;
+        this.testApiPostfix = testApiPostfix;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class ApiAccessFilter implements ContainerRequestFilter {
 
         String path = requestContext.getUriInfo().getPath();
         String[] parts = path.split("/");
-        if (testApiPrefix.equals(parts[0])) {
+        if (testApiPrefix.equals(parts[0]) || testApiPostfix.equals(parts[parts.length - 1])) {
             log.warn("testApi have been disable, request url:{}", path);
             requestContext.abortWith(Response.status(HttpStatus.NOT_FOUND_404).build());
         }

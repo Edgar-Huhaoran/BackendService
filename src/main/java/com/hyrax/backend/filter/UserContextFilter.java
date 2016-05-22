@@ -28,15 +28,18 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
     private static final String USER_TOKEN_HEADER = "X-Hyrax-UserToken";
 
     private final List<String> excludePath;
-    private final String excludePrefix;
+    private final String testApiPrefix;
+    private final String testApiPostfix;
     private final UserTokenService userTokenService;
 
     @Autowired
     public UserContextFilter(@Value("#{'${context.exclude.paths}'.split(',')}") List<String> excludePath,
-                             @Value("${testApi.prefix}") String excludePrefix,
+                             @Value("${testApi.prefix}") String testApiPrefix,
+                             @Value("${testApi.postfix}") String testApiPostfix,
                              UserTokenService userTokenService) {
         this.excludePath = excludePath;
-        this.excludePrefix = excludePrefix;
+        this.testApiPrefix = testApiPrefix;
+        this.testApiPostfix = testApiPostfix;
         this.userTokenService = userTokenService;
     }
 
@@ -78,7 +81,7 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
         }
 
         String parts[] = path.split("/");
-        if (excludePrefix != null && excludePrefix.equals(parts[0])) {
+        if (testApiPrefix.equals(parts[0]) || testApiPostfix.equals(parts[parts.length - 1])) {
             return false;
         }
 

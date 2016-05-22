@@ -53,6 +53,16 @@ public class RefuelService {
         return refuelDAO.getByUserName(userName);
     }
 
+    public void updateRefuel(UUID id, double litre, double cost, RefuelState refuelState) {
+        log.info("update refuel {} with liter:{}, cost:{}, refuelState:{}", id, litre, cost, refuelState);
+        Refuel refuel = refuelDAO.get(id);
+        refuel.withLitre(litre)
+                .withCost(cost)
+                .withState(refuelState)
+                .withModifyTime(new Timestamp(System.currentTimeMillis()));
+        refuelDAO.update(refuel);
+    }
+
     private void verifyAppoint(RefuelDTO refuelDTO) {
         if (refuelDTO.getOwnerName() == null || refuelDTO.getOwnerName().isEmpty() ||
                 refuelDTO.getFromTime() == null || refuelDTO.getFromTime().before(new Timestamp(System.currentTimeMillis())) ||

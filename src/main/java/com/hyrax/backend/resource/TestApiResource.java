@@ -2,7 +2,6 @@ package com.hyrax.backend.resource;
 
 import org.springframework.stereotype.Controller;
 
-import javax.annotation.Resource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;

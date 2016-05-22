@@ -61,10 +61,10 @@ public class JdbcRefuelDAO implements RefuelDAO {
                 .addValue("to_time", refuel.getToTime())
                 .addValue("station_id", refuel.getStationId())
                 .addValue("station_name", refuel.getStationName())
-                .addValue("refuel_type", refuel.getFuelType())
+                .addValue("fuel_type", refuel.getFuelType())
                 .addValue("litre", refuel.getLitre())
                 .addValue("cost", refuel.getCost())
-                .addValue("state", refuel.getState())
+                .addValue("state", refuel.getState().toString())
                 .addValue("modify_time", refuel.getModifyTime());
 
         return namedTemplate.update(sql, parameterSource);
