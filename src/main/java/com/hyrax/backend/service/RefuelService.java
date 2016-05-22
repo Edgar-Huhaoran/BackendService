@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,6 +46,11 @@ public class RefuelService {
                 .withCreateTime(new Timestamp(System.currentTimeMillis()));
         refuelDAO.save(refuel);
         return id;
+    }
+
+    public List<Refuel> getRefuels() {
+        String userName = UserContextHolder.getUserName();
+        return refuelDAO.getByUserName(userName);
     }
 
     private void verifyAppoint(RefuelDTO refuelDTO) {

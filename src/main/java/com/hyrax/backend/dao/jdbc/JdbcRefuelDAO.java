@@ -101,7 +101,7 @@ public class JdbcRefuelDAO implements RefuelDAO {
                     .withToTime(rs.getTimestamp("to_time"))
                     .withStationId(rs.getString("station_id"))
                     .withStationName(rs.getString("station_name"))
-                    .withFuelType(rs.getString("refuel_type"))
+                    .withFuelType(rs.getString("fuel_type"))
                     .withLitre(rs.getDouble("litre"))
                     .withCost(rs.getDouble("cost"))
                     .withState(RefuelState.valueOf(rs.getString("state")))
