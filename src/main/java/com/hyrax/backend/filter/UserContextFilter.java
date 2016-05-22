@@ -11,15 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Priority;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Priority(1001)
 public class UserContextFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
     private static final Logger log = LoggerFactory.getLogger(UserContextFilter.class);
@@ -27,21 +28,21 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
     private static final String USER_TOKEN_HEADER = "X-Hyrax-UserToken";
 
     private final List<String> excludePath;
-    private final String excludePostFix;
+    private final String excludePrefix;
     private final UserTokenService userTokenService;
 
     @Autowired
     public UserContextFilter(@Value("#{'${context.exclude.paths}'.split(',')}") List<String> excludePath,
-                             @Value("${context.exclude.postFix}") String excludePostFix,
+                             @Value("${testApi.prefix}") String excludePrefix,
                              UserTokenService userTokenService) {
         this.excludePath = excludePath;
-        this.excludePostFix = excludePostFix;
+        this.excludePrefix = excludePrefix;
         this.userTokenService = userTokenService;
     }
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        if (!isMatch(requestContext)) {
+        if (!needFilter(requestContext)) {
             log.info("skip request filter, url {} ", requestContext.getUriInfo().getAbsolutePath());
             return;
         }
@@ -60,7 +61,7 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        if (!isMatch(requestContext)) {
+        if (!needFilter(requestContext)) {
             log.info("skip response filter, url {} ", requestContext.getUriInfo().getAbsolutePath());
             return;
         }
@@ -70,14 +71,14 @@ public class UserContextFilter implements ContainerRequestFilter, ContainerRespo
         UserContextHolder.clearContext();
     }
 
-    private boolean isMatch(ContainerRequestContext requestContext) {
+    private boolean needFilter(ContainerRequestContext requestContext) {
         String path = requestContext.getUriInfo().getPath();
         if (excludePath.contains(path)) {
             return false;
         }
 
         String parts[] = path.split("/");
-        if (excludePostFix != null && excludePostFix.equals(parts[parts.length - 1])) {
+        if (excludePrefix != null && excludePrefix.equals(parts[0])) {
             return false;
         }
 

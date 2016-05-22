@@ -27,16 +27,6 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @GET
-    @Path("/hyrax")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getHyraxStatus() {
-        String hyraxStatus = "Hyrax will be the best! " + new Timestamp(System.currentTimeMillis()).toString();
-        Map statusMap = new HashMap<>();
-        statusMap.put("status", hyraxStatus);
-        return Response.ok(statusMap).build();
-    }
-
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
