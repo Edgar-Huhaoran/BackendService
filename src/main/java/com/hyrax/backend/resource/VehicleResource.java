@@ -39,7 +39,9 @@ public class VehicleResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVehicles() {
         List<Vehicle> vehicleList = vehicleService.getVehicles();
-        return Response.ok(vehicleList).build();
+        Map resultMap = new HashMap<>();
+        resultMap.put("vehicleList", vehicleList);
+        return Response.ok(resultMap).build();
     }
 
     @POST

@@ -47,7 +47,9 @@ public class RefuelResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRefuels() {
         List<Refuel> refuelList = refuelService.getRefuels();
-        return Response.ok(refuelList).build();
+        Map resultMap = new HashMap<>();
+        resultMap.put("refuelList", refuelList);
+        return Response.ok(resultMap).build();
     }
 
     @PUT
