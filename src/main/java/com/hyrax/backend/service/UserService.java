@@ -1,5 +1,7 @@
 package com.hyrax.backend.service;
 
+import com.hyrax.backend.credential.UserContext;
+import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.UserDAO;
 import com.hyrax.backend.dto.UserDTO;
 import com.hyrax.backend.entity.User;
@@ -51,6 +53,8 @@ public class UserService {
         if (!userDTO.getPassword().equals(user.getPassword())) {
             throw new HyraxException(ErrorType.PASSWORD_INCORRECT);
         }
+
+        UserContextHolder.setContext(new UserContext(userDTO.getUserName()));
 
         return userTokenService.createUserToken(userDTO.getUserName());
     }
