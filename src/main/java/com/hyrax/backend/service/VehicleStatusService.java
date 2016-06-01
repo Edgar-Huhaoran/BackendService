@@ -25,6 +25,10 @@ public class VehicleStatusService {
         this.vehicleStatusDAO = vehicleStatusDAO;
     }
 
+    public void create(VehicleStatus vehicleStatus) {
+        vehicleStatusDAO.save(vehicleStatus);
+    }
+
     public VehicleStatus getVehicleStatus(UUID id) {
         if (id == null) {
             throw new HyraxException(ErrorType.ID_NULL);

@@ -4,6 +4,10 @@ import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleDAO;
 import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.Vehicle;
+import com.hyrax.backend.entity.VehicleStatus;
+import com.hyrax.backend.entity.state.EngineState;
+import com.hyrax.backend.entity.state.HeadlightState;
+import com.hyrax.backend.entity.state.TransmissionState;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
 import org.slf4j.Logger;
@@ -21,10 +25,13 @@ public class VehicleService {
     private static final Logger log = LoggerFactory.getLogger(VehicleService.class);
 
     private final VehicleDAO vehicleDAO;
+    private final VehicleStatusService vehicleStatusService;
 
     @Autowired
-    public VehicleService(VehicleDAO vehicleDAO) {
+    public VehicleService(VehicleDAO vehicleDAO,
+                          VehicleStatusService vehicleStatusService) {
         this.vehicleDAO = vehicleDAO;
+        this.vehicleStatusService = vehicleStatusService;
     }
 
     public UUID createVehicle(VehicleDTO vehicleDTO) {
@@ -45,6 +52,8 @@ public class VehicleService {
                 .withCreateTime(new Timestamp(System.currentTimeMillis()))
                 .withModifyTime(new Timestamp(System.currentTimeMillis()));
         vehicleDAO.save(vehicle);
+
+        createVehicleStatus(id, userName);
         return id;
     }
 
@@ -79,4 +88,19 @@ public class VehicleService {
             throw new HyraxException(ErrorType.VEHICLE_INFO_INVALID);
         }
     }
+
+    private void createVehicleStatus(UUID vehicleId, String userName) {
+        VehicleStatus vehicleStatus = VehicleStatus.newInstance()
+                .withId(vehicleId)
+                .withUserName(userName)
+                .withMileage(0.0f)
+                .withGasoline(100)
+                .withEngineState(EngineState.GREAT)
+                .withTransmissionState(TransmissionState.GREAT)
+                .withHeadlightState(HeadlightState.GREAT)
+                .withCreateTime(new Timestamp(System.currentTimeMillis()))
+                .withModifyTime(new Timestamp(System.currentTimeMillis()));
+        vehicleStatusService.create(vehicleStatus);
+    }
+
 }

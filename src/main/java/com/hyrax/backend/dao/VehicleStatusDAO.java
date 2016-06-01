@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface VehicleStatusDAO {
 
+    int save(VehicleStatus vehicleStatus);
+
     VehicleStatus get(UUID id);
 
     List<VehicleStatus> getByUserName(String userName);

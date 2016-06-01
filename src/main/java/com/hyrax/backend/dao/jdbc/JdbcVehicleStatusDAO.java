@@ -1,6 +1,7 @@
 package com.hyrax.backend.dao.jdbc;
 
 import com.hyrax.backend.dao.VehicleStatusDAO;
+import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.entity.state.EngineState;
 import com.hyrax.backend.entity.state.HeadlightState;
@@ -24,6 +25,24 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
     @Autowired
     public JdbcVehicleStatusDAO(NamedParameterJdbcTemplate namedTemplate) {
         this.namedTemplate = namedTemplate;
+    }
+
+    public int save(VehicleStatus vehicleStatus) {
+        String sql = "INSERT INTO vehicle_status(id, user_name, mileage, gasoline, engine_state, transmission_state, headlight_state, create_time, modify_time) " +
+                "VALUES (:id, :user_name, :mileage, :gasoline, :engine_state, :transmission_state, :headlight_state, :create_time, :modify_time)";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", vehicleStatus.getId())
+                .addValue("user_name", vehicleStatus.getUserName())
+                .addValue("mileage", vehicleStatus.getMileage())
+                .addValue("gasoline", vehicleStatus.getGasoline())
+                .addValue("engine_state", vehicleStatus.getEngineState().toString())
+                .addValue("transmission_state", vehicleStatus.getTransmissionState().toString())
+                .addValue("headlight_state", vehicleStatus.getHeadlightState().toString())
+                .addValue("create_time", vehicleStatus.getCreateTime())
+                .addValue("modify_time", vehicleStatus.getModifyTime());
+
+        return namedTemplate.update(sql, parameterSource);
     }
 
     public VehicleStatus get(UUID id) {
