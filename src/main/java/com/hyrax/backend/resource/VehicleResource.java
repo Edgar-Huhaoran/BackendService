@@ -8,6 +8,8 @@ import com.hyrax.backend.service.VehicleStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.activation.MimetypesFileTypeMap;
+import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +19,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +31,8 @@ import java.util.UUID;
 @Controller
 @Path("vehicle")
 public class VehicleResource {
+
+    private static final String MARK_SOURCE_URL = "mark/";
 
     private final VehicleService vehicleService;
     private final VehicleStatusService vehicleStatusService;
@@ -80,6 +88,23 @@ public class VehicleResource {
         Map resultMap = new HashMap<>();
         resultMap.put("vehicleStatusList", vehicleStatusList);
         return Response.ok(resultMap).build();
+    }
+
+    @GET
+    @Path("/mark/{markId}")
+    @Produces({"image/png", "image/jpg"})
+    public Response getFullImage(@PathParam("markId") String markId) {
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_SOURCE_URL + markId));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", bos);
+
+            byte[] imageBytes = bos.toByteArray();
+            return Response.ok(imageBytes).build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
