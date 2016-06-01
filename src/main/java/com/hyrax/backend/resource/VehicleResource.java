@@ -54,6 +54,16 @@ public class VehicleResource {
         return Response.ok(resultMap).build();
     }
 
+    @DELETE
+    @Path("{vehicleId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteVehicle(@PathParam("vehicleId") UUID id) {
+        int rows = vehicleService.deleteVehicle(id);
+        Map resultMap = new HashMap<>();
+        resultMap.put("rows", String.valueOf(rows));
+        return Response.ok(resultMap).build();
+    }
+
     @GET
     @Path("{vehicleId}/status")
     @Produces(MediaType.APPLICATION_JSON)
@@ -62,13 +72,13 @@ public class VehicleResource {
         return Response.ok(vehicleStatus).build();
     }
 
-    @DELETE
-    @Path("{vehicleId}")
+    @GET
+    @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteVehicle(@PathParam("vehicleId") UUID id) {
-        int rows = vehicleService.deleteVehicle(id);
+    public Response getVehicleStatusList() {
+        List<VehicleStatus> vehicleStatusList = vehicleStatusService.getVehiclesStatus();
         Map resultMap = new HashMap<>();
-        resultMap.put("rows", String.valueOf(rows));
+        resultMap.put("vehicleStatusList", vehicleStatusList);
         return Response.ok(resultMap).build();
     }
 

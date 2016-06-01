@@ -23,4 +23,10 @@ public class ScheduleConfig {
         vehicleStatusService.checkVehicleStatus();
     }
 
+    @Scheduled(fixedDelay = 1000)
+    public void checkNotification() {
+        log.debug("check unread notification");
+//        vehicleStatusService.checkVehicleStatus();
+    }
+
 }

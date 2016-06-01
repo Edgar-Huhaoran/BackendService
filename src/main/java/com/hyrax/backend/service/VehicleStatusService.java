@@ -30,15 +30,18 @@ public class VehicleStatusService {
             throw new HyraxException(ErrorType.ID_NULL);
         }
 
+        VehicleStatus vehicleStatus = vehicleStatusDAO.get(id);
+        String userName = UserContextHolder.getUserName();
+        if (!userName.equals(vehicleStatus.getUserName())) {
+            throw new HyraxException(ErrorType.NO_PERMISSION);
+        }
+        return vehicleStatus;
+    }
+
+    public List<VehicleStatus> getVehiclesStatus() {
         String userName = UserContextHolder.getUserName();
         List<VehicleStatus> vehicleStatusList = vehicleStatusDAO.getByUserName(userName);
-        for (VehicleStatus vehicleStatus : vehicleStatusList) {
-            if (id.equals(vehicleStatus.getId())) {
-                return vehicleStatus;
-            }
-        }
-
-        return null;
+        return vehicleStatusList;
     }
 
     public void checkVehicleStatus() {

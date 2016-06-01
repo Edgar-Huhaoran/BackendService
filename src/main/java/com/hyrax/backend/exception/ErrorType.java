@@ -17,6 +17,7 @@ public enum ErrorType {
     TOKEN_NOT_EXISTS(HttpStatus.FORBIDDEN, 4031, "user token do not exists", "token不存在"),
     TOKEN_INVALID(HttpStatus.FORBIDDEN, 4032, "user token is invalid", "token无效"),
     TOKEN_EXPIRED(HttpStatus.FORBIDDEN, 4033, "user token is expired", "token过期"),
+    NO_PERMISSION(HttpStatus.FORBIDDEN, 4033, "do not have permission to access", "没有访问权限"),
 
     UNKNOWN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "unknown internal server error", "服务器未知错误");
 
