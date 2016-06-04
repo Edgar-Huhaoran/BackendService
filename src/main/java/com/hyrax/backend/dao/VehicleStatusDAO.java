@@ -12,4 +12,6 @@ public interface VehicleStatusDAO {
     VehicleStatus get(UUID id);
 
     List<VehicleStatus> getByUserName(String userName);
+
+    int delete(UUID id);
 }

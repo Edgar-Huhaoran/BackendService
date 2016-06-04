@@ -89,6 +89,7 @@ public class VehicleService {
             throw new HyraxException(ErrorType.ID_NULL);
         }
 
+        vehicleStatusService.delete(id);
         String userName = UserContextHolder.getUserName();
         List<Vehicle> vehicleList = vehicleDAO.getByUserName(userName);
         for (Vehicle vehicle : vehicleList) {

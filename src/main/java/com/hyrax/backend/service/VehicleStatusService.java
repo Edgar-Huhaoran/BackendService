@@ -2,6 +2,7 @@ package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleStatusDAO;
+import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
@@ -27,6 +28,22 @@ public class VehicleStatusService {
 
     public void create(VehicleStatus vehicleStatus) {
         vehicleStatusDAO.save(vehicleStatus);
+    }
+
+    public int delete(UUID id) {
+        if (id == null) {
+            throw new HyraxException(ErrorType.ID_NULL);
+        }
+
+        String userName = UserContextHolder.getUserName();
+        List<VehicleStatus> statusList = vehicleStatusDAO.getByUserName(userName);
+        for (VehicleStatus status : statusList) {
+            if (id.equals(status.getId())) {
+                return vehicleStatusDAO.delete(id);
+            }
+        }
+
+        return 0;
     }
 
     public VehicleStatus getVehicleStatus(UUID id) {
