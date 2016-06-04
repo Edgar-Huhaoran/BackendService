@@ -66,6 +66,13 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
         return vehicleStatusList;
     }
 
+    public List<VehicleStatus> getAll() {
+        String sql = "SELECT * FROM vehicle_status";
+
+        List<VehicleStatus> vehicleStatusList = namedTemplate.query(sql, VEHICLE_STATUS_ROW_MAPPER);
+        return vehicleStatusList;
+    }
+
     public int delete(UUID id) {
         String sql = "DELETE FROM vehicle_status WHERE id = :id";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
@@ -74,7 +81,6 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
         int rows = namedTemplate.update(sql, parameterSource);
         return rows;
     }
-
 
     private static final RowMapper<VehicleStatus> VEHICLE_STATUS_ROW_MAPPER = new RowMapper<VehicleStatus>() {
         public VehicleStatus mapRow(ResultSet rs, int rowNum) throws SQLException {

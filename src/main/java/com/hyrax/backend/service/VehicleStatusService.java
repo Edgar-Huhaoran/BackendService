@@ -2,7 +2,7 @@ package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleStatusDAO;
-import com.hyrax.backend.entity.Vehicle;
+import com.hyrax.backend.entity.Notification.Type;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
@@ -20,10 +20,12 @@ public class VehicleStatusService {
     private static final Logger log = LoggerFactory.getLogger(VehicleStatusService.class);
 
     private final VehicleStatusDAO vehicleStatusDAO;
+    private final NotificationService notificationService;
 
     @Autowired
-    public VehicleStatusService(VehicleStatusDAO vehicleStatusDAO) {
+    public VehicleStatusService(VehicleStatusDAO vehicleStatusDAO, NotificationService notificationService) {
         this.vehicleStatusDAO = vehicleStatusDAO;
+        this.notificationService = notificationService;
     }
 
     public void create(VehicleStatus vehicleStatus) {
@@ -66,8 +68,38 @@ public class VehicleStatusService {
     }
 
     public void checkVehicleStatus() {
+        List<VehicleStatus> statusList = vehicleStatusDAO.getAll();
+        for (VehicleStatus status : statusList) {
+            checkGasoline(status);
+            checkMileage(status);
+            checkEquipment(status);
+        }
+    }
 
+    private void checkGasoline(VehicleStatus status) {
+        UUID vehicleId = status.getId();
+        String userName = status.getUserName();
+        float gasoline = status.getGasoline();
+
+        boolean isNotifyExist = notificationService.isExist(vehicleId, Type.FUEL_UNDER);
+        if (gasoline < 20.0F && !isNotifyExist) {
+            log.info("notify user {} with {} ", userName, Type.FUEL_UNDER);
+            notificationService.push(userName);
+            notificationService.create(vehicleId, userName, Type.FUEL_UNDER);
+        } else if (gasoline >= 20.0F && isNotifyExist){
+            log.info("delete notification {} for user {}", Type.FUEL_UNDER, userName);
+            notificationService.delete(vehicleId, Type.FUEL_UNDER);
+        }
+    }
+
+    private void checkMileage(VehicleStatus status) {
 
     }
+
+    private void checkEquipment(VehicleStatus status) {
+
+    }
+
+
 
 }
