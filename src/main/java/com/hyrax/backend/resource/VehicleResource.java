@@ -65,8 +65,8 @@ public class VehicleResource {
         return Response.ok(resultMap).build();
     }
 
-    @DELETE
-    @Path("{vehicleId}")
+    @GET
+    @Path("/delete/{vehicleId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteVehicle(@PathParam("vehicleId") UUID id) {
         int rows = vehicleService.deleteVehicle(id);
@@ -76,7 +76,7 @@ public class VehicleResource {
     }
 
     @GET
-    @Path("{vehicleId}/status")
+    @Path("/status/{vehicleId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVehicleStatus(@PathParam("vehicleId") UUID id) {
         VehicleStatus vehicleStatus = vehicleStatusService.getVehicleStatus(id);
@@ -94,7 +94,7 @@ public class VehicleResource {
     }
 
     @GET
-    @Path("/{vehicleId}/mark")
+    @Path("/mark/{vehicleId}")
     @Produces({"image/png", "image/jpg"})
     public Response getFullImage(@PathParam("vehicleId") UUID id) {
         byte[] imageBytes = vehicleService.getMark(id);
