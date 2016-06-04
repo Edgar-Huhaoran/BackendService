@@ -3,8 +3,12 @@ package com.hyrax.backend.resource;
 import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
+import com.hyrax.backend.exception.ErrorType;
+import com.hyrax.backend.exception.HyraxException;
 import com.hyrax.backend.service.VehicleService;
 import com.hyrax.backend.service.VehicleStatusService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -17,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
@@ -32,6 +37,7 @@ import java.util.UUID;
 @Path("vehicle")
 public class VehicleResource {
 
+    private static final Logger log = LoggerFactory.getLogger(VehicleResource.class);
     private static final String MARK_SOURCE_URL = "mark/";
 
     private final VehicleService vehicleService;
@@ -91,19 +97,22 @@ public class VehicleResource {
     }
 
     @GET
-    @Path("/mark/{markId}")
+    @Path("/mark")
     @Produces({"image/png", "image/jpg"})
-    public Response getFullImage(@PathParam("markId") String markId) {
+    public Response getFullImage(@QueryParam("brand") String brand) {
         try {
+            brand = brand + ".jpg";
+
             ClassLoader classLoader = this.getClass().getClassLoader();
-            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_SOURCE_URL + markId));
+            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_SOURCE_URL + brand));
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", bos);
 
             byte[] imageBytes = bos.toByteArray();
             return Response.ok(imageBytes).build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | IllegalArgumentException e) {
+            log.warn("get vehicle mark failed ", e);
+            throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
         }
     }
 
