@@ -15,14 +15,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
+import javax.ws.rs.core.Response;
 
 @Service
 public class VehicleService {
 
     private static final Logger log = LoggerFactory.getLogger(VehicleService.class);
+    private static final String MARK_SOURCE_URL = "mark/";
 
     private final VehicleDAO vehicleDAO;
     private final VehicleStatusService vehicleStatusService;
@@ -62,6 +69,21 @@ public class VehicleService {
         return vehicleDAO.getByUserName(userName);
     }
 
+    public Vehicle getVehicle(UUID id) {
+        String userName = UserContextHolder.getUserName();
+        List<Vehicle> vehicleList = vehicleDAO.getByUserName(userName);
+        if (vehicleList != null) {
+            for (Vehicle vehicle : vehicleList) {
+                if (id.equals(vehicle.getId())) {
+                    return vehicle;
+                }
+            }
+        }
+
+        log.warn("no permission or can not find vehicle");
+        throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
+    }
+
     public int deleteVehicle(UUID id) {
         if (id == null) {
             throw new HyraxException(ErrorType.ID_NULL);
@@ -76,6 +98,23 @@ public class VehicleService {
         }
 
         return 0;
+    }
+
+    public byte[] getMark(UUID id) {
+        Vehicle vehicle = getVehicle(id);
+        String brand = vehicle.getBrand() + ".jpg";
+
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_SOURCE_URL + brand));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", bos);
+
+            return bos.toByteArray();
+        } catch (IOException | IllegalArgumentException e) {
+            log.warn("get vehicle mark failed ", e);
+            throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
+        }
     }
 
     private void assertValid(VehicleDTO vehicleDTO) {

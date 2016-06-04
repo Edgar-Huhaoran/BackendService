@@ -37,9 +37,6 @@ import java.util.UUID;
 @Path("vehicle")
 public class VehicleResource {
 
-    private static final Logger log = LoggerFactory.getLogger(VehicleResource.class);
-    private static final String MARK_SOURCE_URL = "mark/";
-
     private final VehicleService vehicleService;
     private final VehicleStatusService vehicleStatusService;
 
@@ -97,23 +94,11 @@ public class VehicleResource {
     }
 
     @GET
-    @Path("/mark")
+    @Path("/{vehicleId}/mark")
     @Produces({"image/png", "image/jpg"})
-    public Response getFullImage(@QueryParam("brand") String brand) {
-        try {
-            brand = brand + ".jpg";
-
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_SOURCE_URL + brand));
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", bos);
-
-            byte[] imageBytes = bos.toByteArray();
-            return Response.ok(imageBytes).build();
-        } catch (IOException | IllegalArgumentException e) {
-            log.warn("get vehicle mark failed ", e);
-            throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
-        }
+    public Response getFullImage(@PathParam("vehicleId") UUID id) {
+        byte[] imageBytes = vehicleService.getMark(id);
+        return Response.ok(imageBytes).build();
     }
 
 }
