@@ -18,6 +18,9 @@ public class VehicleStatus {
     private HeadlightState headlightState;
     private Timestamp createTime;
     private Timestamp modifyTime;
+    private float lastMileage;
+    private float engineOil;
+    private float cleanFluid;
 
     public static VehicleStatus newInstance() {
         return new VehicleStatus();
@@ -95,6 +98,30 @@ public class VehicleStatus {
         this.modifyTime = modifyTime;
     }
 
+    public float getLastMileage() {
+        return lastMileage;
+    }
+
+    public void setLastMileage(float lastMileage) {
+        this.lastMileage = lastMileage;
+    }
+
+    public float getEngineOil() {
+        return engineOil;
+    }
+
+    public void setEngineOil(float engineOil) {
+        this.engineOil = engineOil;
+    }
+
+    public float getCleanFluid() {
+        return cleanFluid;
+    }
+
+    public void setCleanFluid(float cleanFluid) {
+        this.cleanFluid = cleanFluid;
+    }
+
     public VehicleStatus withId(UUID id) {
         this.setId(id);
         return this;
@@ -137,6 +164,21 @@ public class VehicleStatus {
 
     public VehicleStatus withModifyTime(Timestamp modifyTime) {
         this.setModifyTime(modifyTime);
+        return this;
+    }
+
+    public VehicleStatus withLastMileage(float lastMileage) {
+        this.setLastMileage(lastMileage);
+        return this;
+    }
+
+    public VehicleStatus withEngineOil(float engineOil) {
+        this.setEngineOil(engineOil);
+        return this;
+    }
+
+    public VehicleStatus withCleanFluid(float cleanFluid) {
+        this.setCleanFluid(cleanFluid);
         return this;
     }
 

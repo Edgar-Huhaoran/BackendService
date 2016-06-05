@@ -28,8 +28,10 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
     }
 
     public int save(VehicleStatus vehicleStatus) {
-        String sql = "INSERT INTO vehicle_status(id, user_name, mileage, gasoline, engine_state, transmission_state, headlight_state, create_time, modify_time) " +
-                "VALUES (:id, :user_name, :mileage, :gasoline, :engine_state, :transmission_state, :headlight_state, :create_time, :modify_time)";
+        String sql = "INSERT INTO vehicle_status(id, user_name, mileage, gasoline, engine_state, transmission_state, " +
+                "headlight_state, create_time, modify_time, last_mileage, engine_oil, clean_fluid) " +
+                "VALUES (:id, :user_name, :mileage, :gasoline, :engine_state, :transmission_state, " +
+                ":headlight_state, :create_time, :modify_time, :last_mileage, :engine_oil, :clean_fluid)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", vehicleStatus.getId())
@@ -40,7 +42,10 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
                 .addValue("transmission_state", vehicleStatus.getTransmissionState().toString())
                 .addValue("headlight_state", vehicleStatus.getHeadlightState().toString())
                 .addValue("create_time", vehicleStatus.getCreateTime())
-                .addValue("modify_time", vehicleStatus.getModifyTime());
+                .addValue("modify_time", vehicleStatus.getModifyTime())
+                .addValue("last_mileage", vehicleStatus.getLastMileage())
+                .addValue("engine_oil", vehicleStatus.getEngineOil())
+                .addValue("clean_fluid", vehicleStatus.getCleanFluid());
 
         return namedTemplate.update(sql, parameterSource);
     }
@@ -87,13 +92,16 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
             return VehicleStatus.newInstance()
                     .withId(UUID.fromString(rs.getString("id")))
                     .withUserName(rs.getString("user_name"))
-                    .withMileage(Float.valueOf(rs.getString("mileage")))
-                    .withGasoline(Float.valueOf(rs.getString("gasoline")))
+                    .withMileage(rs.getFloat("mileage"))
+                    .withGasoline(rs.getFloat("gasoline"))
                     .withEngineState(EngineState.valueOf(rs.getString("engine_state")))
                     .withTransmissionState(TransmissionState.valueOf(rs.getString("transmission_state")))
                     .withHeadlightState(HeadlightState.valueOf(rs.getString("headlight_state")))
                     .withCreateTime(rs.getTimestamp("create_time"))
-                    .withModifyTime(rs.getTimestamp("modify_time"));
+                    .withModifyTime(rs.getTimestamp("modify_time"))
+                    .withLastMileage(rs.getFloat("last_mileage"))
+                    .withEngineOil(rs.getFloat("engine_oil"))
+                    .withCleanFluid(rs.getFloat("clean_fluid"));
         }
     };
 
