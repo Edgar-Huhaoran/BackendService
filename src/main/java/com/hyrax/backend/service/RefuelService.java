@@ -28,6 +28,11 @@ public class RefuelService {
         this.refuelDAO = refuelDAO;
     }
 
+    /**
+     * 预约加油
+     * @param refuelDTO 预约的信息
+     * @return 预约的ID
+     */
     public UUID appointRefuel(RefuelDTO refuelDTO) {
         log.info("appoint refuel {}", refuelDTO);
         verifyAppoint(refuelDTO);
@@ -49,12 +54,23 @@ public class RefuelService {
         return id;
     }
 
+    /**
+     * 获取当前用户所有的加油预约
+     * @return
+     */
     public List<Refuel> getRefuels() {
         String userName = UserContextHolder.getUserName();
         log.info("get refuels for user:{}", userName);
         return refuelDAO.getByUserName(userName);
     }
 
+    /**
+     * 更新加油预约的数据
+     * @param id 被更新的数据ID
+     * @param litre 油量
+     * @param cost 花费
+     * @param refuelState 接受状态
+     */
     public void updateRefuel(UUID id, double litre, double cost, RefuelState refuelState) {
         log.info("update refuel {} with liter:{}, cost:{}, refuelState:{}", id, litre, cost, refuelState);
         Refuel refuel = refuelDAO.get(id);
@@ -65,6 +81,10 @@ public class RefuelService {
         refuelDAO.update(refuel);
     }
 
+    /**
+     * 验证加油预约的参数是否合法
+     * @param refuelDTO
+     */
     private void verifyAppoint(RefuelDTO refuelDTO) {
         if (refuelDTO.getOwnerName() == null || refuelDTO.getOwnerName().isEmpty() ||
                 refuelDTO.getFromTime() == null || refuelDTO.getFromTime().before(new Timestamp(System.currentTimeMillis())) ||

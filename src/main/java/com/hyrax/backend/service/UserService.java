@@ -29,6 +29,10 @@ public class UserService {
         this.userTokenService = userTokenService;
     }
 
+    /**
+     * 用户注册
+     * @param userDTO 用户信息
+     */
     public void register(UserDTO userDTO) {
         log.info("register user with userName:{}, password:{}", userDTO.getUserName(), userDTO.getPassword());
         registerValidate(userDTO);
@@ -42,6 +46,11 @@ public class UserService {
         userDAO.save(user);
     }
 
+    /**
+     * 用户登录
+     * @param userDTO 登录的用户信息
+     * @return 用户的Token
+     */
     public String login(UserDTO userDTO) {
         log.info("user login with userName:{}, password:{}", userDTO.getUserName(), userDTO.getPassword());
         loginValidate(userDTO);
@@ -59,6 +68,10 @@ public class UserService {
         return userTokenService.createUserToken(userDTO.getUserName());
     }
 
+    /**
+     * 用户注册时的参数验证
+     * @param userDTO
+     */
     private void registerValidate(UserDTO userDTO) {
         String userName = userDTO.getUserName();
         if (userName == null || userName.isEmpty()) {
@@ -74,6 +87,10 @@ public class UserService {
         }
     }
 
+    /**
+     * 用户登录时的参数验证
+     * @param userDTO
+     */
     private void loginValidate(UserDTO userDTO) {
         String userName = userDTO.getUserName();
         if (userName == null || userName.isEmpty()) {

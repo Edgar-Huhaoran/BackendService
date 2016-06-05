@@ -48,6 +48,11 @@ public class UserTokenService {
         }
     }
 
+    /**
+     * 创建一个用户登录的Token
+     * @param userName 用户名
+     * @return 被创建的Token
+     */
     public String createUserToken(String userName) {
         Timestamp validTime = new Timestamp(System.currentTimeMillis() + seconds * 1000);
         UserToken tokenUser = UserToken.newInstance().withUserName(userName).withValidTime(validTime);
@@ -62,6 +67,11 @@ public class UserTokenService {
                 .toString();
     }
 
+    /**
+     * Token解析
+     * @param token Token
+     * @return 被解析出来的用户名
+     */
     public String parseUserToken(String token) {
         String[] parts = token.split(Pattern.quote(SEPARATOR));
         if (parts.length == 2 && parts[0].length() > 0 && parts[1].length() > 0) {
@@ -85,6 +95,11 @@ public class UserTokenService {
         throw new HyraxException(ErrorType.TOKEN_INVALID);
     }
 
+    /**
+     * 把用户的Token转化成字节数组
+     * @param tokenUser
+     * @return
+     */
     private byte[] toJson(UserToken tokenUser) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -94,6 +109,11 @@ public class UserTokenService {
         }
     }
 
+    /**
+     * 从字节数组中转化出用户的Token
+     * @param bytes
+     * @return
+     */
     private UserToken fromJson(byte[] bytes) {
         ObjectMapper mapper = new ObjectMapper();
         try {

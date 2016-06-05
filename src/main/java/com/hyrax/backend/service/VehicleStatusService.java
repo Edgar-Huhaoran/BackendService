@@ -28,10 +28,19 @@ public class VehicleStatusService {
         this.notificationService = notificationService;
     }
 
+    /**
+     * 创建一个汽车状态的记录
+     * @param vehicleStatus
+     */
     public void create(VehicleStatus vehicleStatus) {
         vehicleStatusDAO.save(vehicleStatus);
     }
 
+    /**
+     * 通过ID删除一个汽车状态的记录
+     * @param id 被删除状态的汽车ID
+     * @return
+     */
     public int delete(UUID id) {
         if (id == null) {
             throw new HyraxException(ErrorType.ID_NULL);
@@ -48,6 +57,11 @@ public class VehicleStatusService {
         return 0;
     }
 
+    /**
+     * 根据汽车的ID获取汽车状态数据
+     * @param id 被获取状态的汽车ID
+     * @return
+     */
     public VehicleStatus getVehicleStatus(UUID id) {
         if (id == null) {
             throw new HyraxException(ErrorType.ID_NULL);
@@ -61,12 +75,19 @@ public class VehicleStatusService {
         return vehicleStatus;
     }
 
+    /**
+     * 获取当前用户的所有汽车状态数据
+     * @return
+     */
     public List<VehicleStatus> getVehiclesStatus() {
         String userName = UserContextHolder.getUserName();
         List<VehicleStatus> vehicleStatusList = vehicleStatusDAO.getByUserName(userName);
         return vehicleStatusList;
     }
 
+    /**
+     * 检查汽车状态
+     */
     public void check() {
         List<VehicleStatus> statusList = vehicleStatusDAO.getAll();
         for (VehicleStatus status : statusList) {
@@ -76,6 +97,10 @@ public class VehicleStatusService {
         }
     }
 
+    /**
+     * 检查汽车油量状态
+     * @param status
+     */
     private void checkGasoline(VehicleStatus status) {
         UUID vehicleId = status.getId();
         String userName = status.getUserName();
@@ -94,10 +119,18 @@ public class VehicleStatusService {
         }
     }
 
+    /**
+     * 检查汽车行驶里程
+     * @param status
+     */
     private void checkMileage(VehicleStatus status) {
 
     }
 
+    /**
+     * 检查汽车设备状态
+     * @param status
+     */
     private void checkEquipment(VehicleStatus status) {
 
     }

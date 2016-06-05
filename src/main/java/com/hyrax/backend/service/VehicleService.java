@@ -41,6 +41,11 @@ public class VehicleService {
         this.vehicleStatusService = vehicleStatusService;
     }
 
+    /**
+     * 在当前的用户下添加一辆汽车数据
+     * @param vehicleDTO 汽车数据
+     * @return 新增汽车记录的ID
+     */
     public UUID createVehicle(VehicleDTO vehicleDTO) {
         assertValid(vehicleDTO);
 
@@ -66,11 +71,20 @@ public class VehicleService {
         return id;
     }
 
+    /**
+     * 获取当前用户的所有汽车数据
+     * @return
+     */
     public List<Vehicle> getVehicles() {
         String userName = UserContextHolder.getUserName();
         return vehicleDAO.getByUserName(userName);
     }
 
+    /**
+     * 根据汽车的ID获取汽车的数据
+     * @param id 汽车的ID
+     * @return 被查询的汽车数据
+     */
     public Vehicle getVehicle(UUID id) {
         String userName = UserContextHolder.getUserName();
         List<Vehicle> vehicleList = vehicleDAO.getByUserName(userName);
@@ -86,6 +100,11 @@ public class VehicleService {
         throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
     }
 
+    /**
+     * 删除指定ID的汽车数据
+     * @param id
+     * @return
+     */
     public int deleteVehicle(UUID id) {
         if (id == null) {
             throw new HyraxException(ErrorType.ID_NULL);
@@ -103,6 +122,11 @@ public class VehicleService {
         return 0;
     }
 
+    /**
+     * 根据汽车的ID获取车标图片
+     * @param id 汽车的ID
+     * @return
+     */
     public byte[] getMark(UUID id) {
         Vehicle vehicle = getVehicle(id);
         String brand = vehicle.getBrand() + ".jpg";
