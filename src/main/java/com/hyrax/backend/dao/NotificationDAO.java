@@ -15,6 +15,8 @@ public interface NotificationDAO {
 
     List<Notification> getByUserName(String userName);
 
+    List<Notification> getAll();
+
     int delete(UUID id);
 
 }

@@ -70,6 +70,13 @@ public class JdbcNotificationDAO implements NotificationDAO {
         return notificationList;
     }
 
+    public List<Notification> getAll() {
+        String sql = "SELECT * FROM notification";
+
+        List<Notification> notificationList = namedTemplate.query(sql, NOTIFICATION_ROW_MAPPER);
+        return notificationList;
+    }
+
     public int delete(UUID id) {
         String sql = "DELETE FROM notification WHERE id = :id";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()

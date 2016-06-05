@@ -67,7 +67,7 @@ public class VehicleStatusService {
         return vehicleStatusList;
     }
 
-    public void checkVehicleStatus() {
+    public void check() {
         List<VehicleStatus> statusList = vehicleStatusDAO.getAll();
         for (VehicleStatus status : statusList) {
             checkGasoline(status);
@@ -83,7 +83,7 @@ public class VehicleStatusService {
 
         boolean isNotifyExist = notificationService.isExist(vehicleId, Type.FUEL_UNDER);
         if (gasoline < 20.0F && !isNotifyExist) {
-            log.info("notify user {} with {} ", userName, Type.FUEL_UNDER);
+            log.info("notify user {} with notification {} ", userName, Type.FUEL_UNDER);
             notificationService.push(userName);
             notificationService.create(vehicleId, userName, Type.FUEL_UNDER);
         } else if (gasoline >= 20.0F && isNotifyExist){

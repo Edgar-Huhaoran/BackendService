@@ -1,7 +1,6 @@
 package com.hyrax.backend.dao.jdbc;
 
 import com.hyrax.backend.dao.VehicleStatusDAO;
-import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.entity.state.EngineState;
 import com.hyrax.backend.entity.state.HeadlightState;

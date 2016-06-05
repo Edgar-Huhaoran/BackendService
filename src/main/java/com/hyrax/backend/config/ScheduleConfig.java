@@ -1,5 +1,6 @@
 package com.hyrax.backend.config;
 
+import com.hyrax.backend.service.NotificationService;
 import com.hyrax.backend.service.VehicleStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +17,19 @@ public class ScheduleConfig {
 
     @Autowired
     private VehicleStatusService vehicleStatusService;
+    @Autowired
+    private NotificationService notificationService;
 
     @Scheduled(fixedDelay = 1000)
     public void checkVehicleStatus() {
         log.debug("check vehicle status");
-        vehicleStatusService.checkVehicleStatus();
+        vehicleStatusService.check();
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     public void checkNotification() {
         log.debug("check unread notification");
-//        vehicleStatusService.checkVehicleStatus();
+        notificationService.check();
     }
 
 }

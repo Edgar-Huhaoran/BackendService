@@ -1,7 +1,9 @@
 package com.hyrax.backend.service;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hyrax.backend.dao.NotificationDAO;
@@ -25,12 +27,44 @@ public class NotificationService {
         this.notificationDAO = notificationDAO;
     }
 
+    /**
+     * 检查未读取的通知
+     */
+    public void check() {
+        List<Notification> notifications = notificationDAO.getAll();
+        Set<String> userNameSet = new HashSet<>();
+
+        for (Notification notification : notifications) {
+            userNameSet.add(notification.getUserName());
+        }
+
+        for (String userName : userNameSet) {
+            List<Notification> notificationList = notificationDAO.getByUserName(userName);
+            for (Notification notification : notificationList) {
+                if (!notification.isReaded()) {
+                    push(userName);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 发送推送通知
+     * @param userName 被推送的用户名
+     */
     public void push(String userName) {
         log.info("push notification to : {}", userName);
         // TODO finish push logic
 
     }
 
+    /**
+     * 创建一个通知
+     * @param vehicleId 车辆的ID
+     * @param userName 车辆所属的用户名
+     * @param type 通知类型
+     */
     public void create(UUID vehicleId, String userName, Type type) {
         create(vehicleId, userName, type, null);
     }
@@ -47,6 +81,12 @@ public class NotificationService {
         notificationDAO.save(notification);
     }
 
+    /**
+     * 检查通知是否已经存在
+     * @param vehicleId 车辆的ID
+     * @param type 通知的类型
+     * @return 是否存在
+     */
     public boolean isExist(UUID vehicleId, Type type) {
         return isExist(vehicleId, type, null);
     }
@@ -66,6 +106,11 @@ public class NotificationService {
         return false;
     }
 
+    /**
+     * 删除一个通知
+     * @param vehicleId 车辆的ID
+     * @param type 通知的类型
+     */
     public void delete(UUID vehicleId, Type type) {
         delete(vehicleId, type, null);
     }
