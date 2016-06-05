@@ -11,7 +11,7 @@ import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.NotificationDAO;
 import com.hyrax.backend.dto.NotificationDTO;
 import com.hyrax.backend.entity.Notification;
-import com.hyrax.backend.entity.Notification.Type;
+import com.hyrax.backend.entity.NotificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,11 +90,11 @@ public class NotificationService {
      * @param userName 车辆所属的用户名
      * @param type 通知类型
      */
-    public void create(UUID vehicleId, String userName, Type type) {
-        create(vehicleId, userName, type, null);
+    public void create(UUID vehicleId, String userName, NotificationType type, String message) {
+        create(vehicleId, userName, type, null, message);
     }
 
-    public void create(UUID vehicleId, String userName, Type type, String description) {
+    public void create(UUID vehicleId, String userName, NotificationType type, String description, String message) {
         Notification notification = Notification.newInstance()
                 .withId(UUID.randomUUID())
                 .withVehicleId(vehicleId)
@@ -102,7 +102,8 @@ public class NotificationService {
                 .withType(type)
                 .withDescription(description)
                 .withIsReaded(false)
-                .withCreateTime(new Timestamp(System.currentTimeMillis()));
+                .withCreateTime(new Timestamp(System.currentTimeMillis()))
+                .withMessage(message);
         notificationDAO.save(notification);
     }
 
@@ -112,11 +113,11 @@ public class NotificationService {
      * @param type 通知的类型
      * @return 是否存在
      */
-    public boolean isExist(UUID vehicleId, Type type) {
+    public boolean isExist(UUID vehicleId, NotificationType type) {
         return isExist(vehicleId, type, null);
     }
 
-    public boolean isExist(UUID vehicleId, Type type, String description) {
+    public boolean isExist(UUID vehicleId, NotificationType type, String description) {
         Assert.notNull(vehicleId);
         Assert.notNull(type);
 
@@ -136,11 +137,11 @@ public class NotificationService {
      * @param vehicleId 车辆的ID
      * @param type 通知的类型
      */
-    public void delete(UUID vehicleId, Type type) {
+    public void delete(UUID vehicleId, NotificationType type) {
         delete(vehicleId, type, null);
     }
 
-    public void delete(UUID vehicleId, Type type, String description) {
+    public void delete(UUID vehicleId, NotificationType type, String description) {
         Assert.notNull(vehicleId);
         Assert.notNull(type);
 

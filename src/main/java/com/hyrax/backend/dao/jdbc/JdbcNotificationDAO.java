@@ -2,6 +2,7 @@ package com.hyrax.backend.dao.jdbc;
 
 import com.hyrax.backend.dao.NotificationDAO;
 import com.hyrax.backend.entity.Notification;
+import com.hyrax.backend.entity.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,8 +25,8 @@ public class JdbcNotificationDAO implements NotificationDAO {
     }
 
     public int save(Notification notification) {
-        String sql = "INSERT INTO notification(id, vehicle_id, user_name, type, description, is_readed, read_time, create_time) " +
-                "VALUES (:id, :vehicle_id, :user_name, :type, :description, :is_readed, :read_time, :create_time)";
+        String sql = "INSERT INTO notification(id, vehicle_id, user_name, type, description, is_readed, read_time, create_time, message) " +
+                "VALUES (:id, :vehicle_id, :user_name, :type, :description, :is_readed, :read_time, :create_time, :message)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", notification.getId())
@@ -35,7 +36,8 @@ public class JdbcNotificationDAO implements NotificationDAO {
                 .addValue("description", notification.getDescription())
                 .addValue("is_readed", notification.isReaded())
                 .addValue("read_time", notification.getReadTime())
-                .addValue("create_time", notification.getCreateTime());
+                .addValue("create_time", notification.getCreateTime())
+                .addValue("message", notification.getMessage());
 
         return namedTemplate.update(sql, parameterSource);
     }
@@ -89,7 +91,8 @@ public class JdbcNotificationDAO implements NotificationDAO {
                 .addValue("description", notification.getDescription())
                 .addValue("is_readed", notification.isReaded())
                 .addValue("read_time", notification.getReadTime())
-                .addValue("create_time", notification.getCreateTime());
+                .addValue("create_time", notification.getCreateTime())
+                .addValue("message", notification.getMessage());
 
         return namedTemplate.update(sql, parameterSource);
     }
@@ -109,11 +112,12 @@ public class JdbcNotificationDAO implements NotificationDAO {
                     .withId(UUID.fromString(rs.getString("id")))
                     .withVehicleId(UUID.fromString(rs.getString("vehicle_id")))
                     .withUserName(rs.getString("user_name"))
-                    .withType(Notification.Type.valueOf(rs.getString("type")))
+                    .withType(NotificationType.valueOf(rs.getString("type")))
                     .withDescription(rs.getString("description"))
                     .withIsReaded(rs.getBoolean("is_readed"))
                     .withReadTime(rs.getTimestamp("read_time"))
-                    .withCreateTime(rs.getTimestamp("create_time"));
+                    .withCreateTime(rs.getTimestamp("create_time"))
+                    .withMessage(rs.getString("message"));
         }
     };
 

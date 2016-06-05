@@ -2,7 +2,7 @@ package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleStatusDAO;
-import com.hyrax.backend.entity.Notification.Type;
+import com.hyrax.backend.entity.NotificationType;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
@@ -81,14 +81,16 @@ public class VehicleStatusService {
         String userName = status.getUserName();
         float gasoline = status.getGasoline();
 
-        boolean isNotifyExist = notificationService.isExist(vehicleId, Type.FUEL_UNDER);
+        boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.FUEL_UNDER);
         if (gasoline < 20.0F && !isNotifyExist) {
-            log.info("notify user {} with notification {} ", userName, Type.FUEL_UNDER);
+            log.info("notify user {} with notification {} ", userName, NotificationType.FUEL_UNDER);
             notificationService.push(userName);
-            notificationService.create(vehicleId, userName, Type.FUEL_UNDER);
+            String[] messages = NotificationType.FUEL_UNDER.getMessages();
+            String message = messages[0];
+            notificationService.create(vehicleId, userName, NotificationType.FUEL_UNDER, message);
         } else if (gasoline >= 20.0F && isNotifyExist){
-            log.info("delete notification {} for user {}", Type.FUEL_UNDER, userName);
-            notificationService.delete(vehicleId, Type.FUEL_UNDER);
+            log.info("delete notification {} for user {}", NotificationType.FUEL_UNDER, userName);
+            notificationService.delete(vehicleId, NotificationType.FUEL_UNDER);
         }
     }
 

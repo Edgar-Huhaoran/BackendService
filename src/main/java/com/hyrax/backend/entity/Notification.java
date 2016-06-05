@@ -5,22 +5,15 @@ import java.util.UUID;
 
 public class Notification {
 
-    public enum Type {
-        FUEL_UNDER,
-        MILEAGE_ACHIEVE,
-        ENGINE_ABNORMAL,
-        TRANSMISSION_ABNORMAL,
-        HEADLIGHT_ABNORMAL
-    }
-
     private UUID id;
     private UUID vehicleId;
     private String userName;
-    private Type type;
+    private NotificationType type;
     private String description;
     private boolean isReaded;
     private Timestamp readTime;
     private Timestamp createTime;
+    private String message;
 
     public static Notification newInstance() {
         return new Notification();
@@ -50,11 +43,11 @@ public class Notification {
         this.userName = userName;
     }
 
-    public Type getType() {
+    public NotificationType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 
@@ -90,6 +83,14 @@ public class Notification {
         this.createTime = createTime;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public Notification withId(UUID id) {
         this.setId(id);
         return this;
@@ -105,7 +106,7 @@ public class Notification {
         return this;
     }
 
-    public Notification withType(Type type) {
+    public Notification withType(NotificationType type) {
         this.setType(type);
         return this;
     }
@@ -127,6 +128,11 @@ public class Notification {
 
     public Notification withCreateTime(Timestamp createTime) {
         this.setCreateTime(createTime);
+        return this;
+    }
+
+    public Notification withMessage(String message) {
+        this.setMessage(message);
         return this;
     }
 }
