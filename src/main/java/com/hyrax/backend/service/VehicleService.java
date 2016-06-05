@@ -57,7 +57,9 @@ public class VehicleService {
                 .withDoorNum(vehicleDTO.getDoorNum())
                 .withSeatNum(vehicleDTO.getSeatNum())
                 .withCreateTime(new Timestamp(System.currentTimeMillis()))
-                .withModifyTime(new Timestamp(System.currentTimeMillis()));
+                .withModifyTime(new Timestamp(System.currentTimeMillis()))
+                .withGasCapacity(vehicleDTO.getGasCapacity())
+                .withMaintainCycle(vehicleDTO.getMaintainCycle());
         vehicleDAO.save(vehicle);
 
         createVehicleStatus(id, userName);

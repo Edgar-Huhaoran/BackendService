@@ -16,6 +16,8 @@ public class Vehicle {
     private int seatNum;
     private Timestamp createTime;
     private Timestamp modifyTime;
+    private float gasCapacity;
+    private int maintainCycle;
 
     public static Vehicle newInstance() {
         return new Vehicle();
@@ -109,6 +111,22 @@ public class Vehicle {
         this.modifyTime = modifyTime;
     }
 
+    public float getGasCapacity() {
+        return gasCapacity;
+    }
+
+    public void setGasCapacity(float gasCapacity) {
+        this.gasCapacity = gasCapacity;
+    }
+
+    public int getMaintainCycle() {
+        return maintainCycle;
+    }
+
+    public void setMaintainCycle(int maintainCycle) {
+        this.maintainCycle = maintainCycle;
+    }
+
     public Vehicle withId(UUID id) {
         this.setId(id);
         return this;
@@ -161,6 +179,16 @@ public class Vehicle {
 
     public Vehicle withModifyTime(Timestamp modifyTime) {
         this.setModifyTime(modifyTime);
+        return this;
+    }
+
+    public Vehicle withGasCapacity(float gasCapacity) {
+        this.setGasCapacity(gasCapacity);
+        return this;
+    }
+
+    public Vehicle withMaintainCycle(int maintainCycle) {
+        this.setMaintainCycle(maintainCycle);
         return this;
     }
 }

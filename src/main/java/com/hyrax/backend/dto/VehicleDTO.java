@@ -13,6 +13,8 @@ public class VehicleDTO {
     private String engine;
     private int doorNum;
     private int seatNum;
+    private float gasCapacity;
+    private int maintainCycle;
 
     public UUID getId() {
         return id;
@@ -84,5 +86,21 @@ public class VehicleDTO {
 
     public void setSeatNum(int seatNum) {
         this.seatNum = seatNum;
+    }
+
+    public float getGasCapacity() {
+        return gasCapacity;
+    }
+
+    public void setGasCapacity(float gasCapacity) {
+        this.gasCapacity = gasCapacity;
+    }
+
+    public int getMaintainCycle() {
+        return maintainCycle;
+    }
+
+    public void setMaintainCycle(int maintainCycle) {
+        this.maintainCycle = maintainCycle;
     }
 }
