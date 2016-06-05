@@ -77,6 +77,23 @@ public class JdbcNotificationDAO implements NotificationDAO {
         return notificationList;
     }
 
+    public int update(Notification notification) {
+        String sql = "UPDATE notification SET vehicle_id = :vehicle_id, user_name = :user_name, type = :type, description = :description, " +
+                "is_readed = :is_readed, read_time = :read_time, create_time = :create_time WHERE id = :id";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", notification.getId())
+                .addValue("vehicle_id", notification.getVehicleId())
+                .addValue("user_name", notification.getUserName())
+                .addValue("type", notification.getType().toString())
+                .addValue("description", notification.getDescription())
+                .addValue("is_readed", notification.isReaded())
+                .addValue("read_time", notification.getReadTime())
+                .addValue("create_time", notification.getCreateTime());
+
+        return namedTemplate.update(sql, parameterSource);
+    }
+
     public int delete(UUID id) {
         String sql = "DELETE FROM notification WHERE id = :id";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()

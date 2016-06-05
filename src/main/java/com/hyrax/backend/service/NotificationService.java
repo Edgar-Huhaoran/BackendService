@@ -2,11 +2,14 @@ package com.hyrax.backend.service;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.NotificationDAO;
+import com.hyrax.backend.dto.NotificationDTO;
 import com.hyrax.backend.entity.Notification;
 import com.hyrax.backend.entity.Notification.Type;
 import org.slf4j.Logger;
@@ -47,6 +50,28 @@ public class NotificationService {
                 }
             }
         }
+    }
+
+    /**
+     * 为当前用户获取所有未读的通知
+     * @return 未读的通知
+     */
+    public List<NotificationDTO> read() {
+        String userName = UserContextHolder.getUserName();
+        List<Notification> notifications = notificationDAO.getByUserName(userName);
+        List<NotificationDTO> notificationDTOs = new LinkedList<>();
+
+        log.info("read notifications for user {}", userName);
+        for (Notification notification : notifications) {
+            if (!notification.isReaded()) {
+                notificationDTOs.add(NotificationDTO.fromNotification(notification));
+                notification.setReaded(true);
+                notification.setReadTime(new Timestamp(System.currentTimeMillis()));
+                notificationDAO.update(notification);
+            }
+        }
+
+        return notificationDTOs;
     }
 
     /**

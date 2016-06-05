@@ -17,6 +17,8 @@ public interface NotificationDAO {
 
     List<Notification> getAll();
 
+    int update(Notification notification);
+
     int delete(UUID id);
 
 }

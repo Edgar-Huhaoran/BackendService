@@ -3,6 +3,7 @@ package com.hyrax.backend.config;
 import com.hyrax.backend.exception.HyraxMapper;
 import com.hyrax.backend.filter.ApiAccessFilter;
 import com.hyrax.backend.filter.UserContextFilter;
+import com.hyrax.backend.resource.NotificationResource;
 import com.hyrax.backend.resource.RefuelResource;
 import com.hyrax.backend.resource.StatusResource;
 import com.hyrax.backend.resource.TestApiResource;
@@ -22,6 +23,7 @@ public class JerseyConfig extends ResourceConfig {
         register(VehicleResource.class);
         register(RefuelResource.class);
         register(TestApiResource.class);
+        register(NotificationResource.class);
 
         // Filter Register
         register(ApiAccessFilter.class);
