@@ -9,6 +9,8 @@ public interface VehicleStatusDAO {
 
     int save(VehicleStatus vehicleStatus);
 
+    int update(VehicleStatus vehicleStatus);
+
     VehicleStatus get(UUID id);
 
     List<VehicleStatus> getByUserName(String userName);

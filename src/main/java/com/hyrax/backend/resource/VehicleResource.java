@@ -83,6 +83,18 @@ public class VehicleResource {
         return Response.ok(vehicleStatus).build();
     }
 
+    // TODO: 仅用于测试的 API
+    @POST
+    @Path("/status/testApi")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response setVehicleStatus(VehicleStatus vehicleStatus) {
+        vehicleStatusService.update(vehicleStatus);
+        Map resultMap = new HashMap<>();
+        resultMap.put("vehicleId", vehicleStatus.getId().toString());
+        return Response.ok(resultMap).build();
+    }
+
     @GET
     @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)

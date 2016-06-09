@@ -49,6 +49,29 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
         return namedTemplate.update(sql, parameterSource);
     }
 
+    public int update(VehicleStatus vehicleStatus) {
+        String sql = "UPDATE vehicle_status SET user_name = :user_name , mileage = :mileage, gasoline = :gasoline, " +
+                "engine_state = :engine_state, transmission_state = :transmission_state, headlight_state = :headlight_state, " +
+                "create_time = :create_time, modify_time = :modify_time, last_mileage = :last_mileage, engine_oil = :engine_oil, " +
+                "clean_fluid = :clean_fluid WHERE id = :id";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", vehicleStatus.getId())
+                .addValue("user_name", vehicleStatus.getUserName())
+                .addValue("mileage", vehicleStatus.getMileage())
+                .addValue("gasoline", vehicleStatus.getGasoline())
+                .addValue("engine_state", vehicleStatus.getEngineState().toString())
+                .addValue("transmission_state", vehicleStatus.getTransmissionState().toString())
+                .addValue("headlight_state", vehicleStatus.getHeadlightState().toString())
+                .addValue("create_time", vehicleStatus.getCreateTime())
+                .addValue("modify_time", vehicleStatus.getModifyTime())
+                .addValue("last_mileage", vehicleStatus.getLastMileage())
+                .addValue("engine_oil", vehicleStatus.getEngineOil())
+                .addValue("clean_fluid", vehicleStatus.getCleanFluid());
+
+        return namedTemplate.update(sql, parameterSource);
+    }
+
     public VehicleStatus get(UUID id) {
         String sql = "SELECT * FROM vehicle_status WHERE id = :id";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
