@@ -13,6 +13,7 @@ import com.hyrax.backend.exception.HyraxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
@@ -23,16 +24,23 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
-import javax.ws.rs.core.Response;
 
 @Service
 public class VehicleService {
 
     private static final Logger log = LoggerFactory.getLogger(VehicleService.class);
-    private static final String MARK_SOURCE_URL = "mark/";
+    private static final String MARK_RESOURCE_PATH = "mark/";
+    private static final String MARK_RESOURCE_URL = "/vehicle/mark";
 
     private final VehicleDAO vehicleDAO;
     private final VehicleStatusService vehicleStatusService;
+
+    @Value("${server.protocol}")
+    private String protocol;
+    @Value("${server.address}")
+    private String address;
+    @Value("${server.port}")
+    private String port;
 
     @Autowired
     public VehicleService(VehicleDAO vehicleDAO,
@@ -42,7 +50,7 @@ public class VehicleService {
     }
 
     /**
-     * 在当前的用户下添加一辆汽车数据
+     * 在当前的用户下添加一辆汽车
      * @param vehicleDTO 汽车数据
      * @return 新增汽车记录的ID
      */
@@ -51,11 +59,13 @@ public class VehicleService {
 
         UUID id = UUID.randomUUID();
         String userName = UserContextHolder.getUserName();
+
+        String markUrl = protocol + "://" + address + ":" + port + MARK_RESOURCE_URL + "/" + id.toString();
         Vehicle vehicle = Vehicle.newInstance()
                 .withId(id)
                 .withUserName(userName)
                 .withBrand(vehicleDTO.getBrand())
-                .withMark(vehicleDTO.getMark())
+                .withMark(markUrl)
                 .withModel(vehicleDTO.getModel())
                 .withNumber(vehicleDTO.getNumber())
                 .withEngine(vehicleDTO.getEngine())
@@ -133,7 +143,7 @@ public class VehicleService {
 
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
-            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_SOURCE_URL + brand));
+            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_RESOURCE_PATH + brand));
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", bos);
 
