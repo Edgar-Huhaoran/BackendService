@@ -10,6 +10,9 @@ import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletConta
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.stereotype.Component;
 
+/**
+ * Jetty Web 容器配置
+ */
 @Component
 public class JettyCustomizer implements EmbeddedServletContainerCustomizer {
 

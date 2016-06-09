@@ -7,6 +7,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+/**
+ * 工程启动类
+ */
 @SpringBootApplication
 @Import({BackendConfig.class})
 public class BootStrap extends SpringBootServletInitializer {
