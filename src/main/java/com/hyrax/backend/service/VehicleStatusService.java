@@ -243,13 +243,13 @@ public class VehicleStatusService {
      */
     private void checkHeadlightState(UUID vehicleId, String userName, HeadlightState headlightState) {
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.HEADLIGHT_ABNORMAL);
-        if (HeadlightState.TESTSTATE.equals(headlightState) && !isNotifyExist) {
+        if (HeadlightState.ABNORMAL.equals(headlightState) && !isNotifyExist) {
             log.info("notify user {} with notification {} ", userName, NotificationType.HEADLIGHT_ABNORMAL);
             notificationService.push(userName);
             String[] messages = NotificationType.HEADLIGHT_ABNORMAL.getMessages();
             String message = messages[0];
             notificationService.create(vehicleId, userName, NotificationType.HEADLIGHT_ABNORMAL, message);
-        } else if (!HeadlightState.TESTSTATE.equals(headlightState) && isNotifyExist) {
+        } else if (!HeadlightState.ABNORMAL.equals(headlightState) && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.HEADLIGHT_ABNORMAL, userName);
             notificationService.delete(vehicleId, NotificationType.HEADLIGHT_ABNORMAL);
         }

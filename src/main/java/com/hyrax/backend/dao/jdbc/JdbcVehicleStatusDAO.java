@@ -5,6 +5,8 @@ import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.entity.state.EngineState;
 import com.hyrax.backend.entity.state.HeadlightState;
 import com.hyrax.backend.entity.state.TransmissionState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,6 +20,8 @@ import java.util.UUID;
 
 @Repository
 public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
+
+    private static final Logger log = LoggerFactory.getLogger(JdbcVehicleStatusDAO.class);
 
     private final NamedParameterJdbcTemplate namedTemplate;
 
@@ -111,6 +115,8 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
 
     private static final RowMapper<VehicleStatus> VEHICLE_STATUS_ROW_MAPPER = new RowMapper<VehicleStatus>() {
         public VehicleStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
+            log.info("vehicleStatus id {} , headlightState {}", rs.getString("id"), rs.getString("headlight_state"));
+            log.info("type {}, {}", HeadlightState.GREAT, HeadlightState.ABNORMAL);
             return VehicleStatus.newInstance()
                     .withId(UUID.fromString(rs.getString("id")))
                     .withUserName(rs.getString("user_name"))
