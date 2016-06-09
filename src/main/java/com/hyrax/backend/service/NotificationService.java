@@ -1,6 +1,7 @@
 package com.hyrax.backend.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,6 +85,9 @@ public class NotificationService {
 
     }
 
+
+    // ====================================== 数据库操作 ====================================== //
+
     /**
      * 创建一个通知
      * @param vehicleId 车辆的ID
@@ -92,6 +96,10 @@ public class NotificationService {
      */
     public void create(UUID vehicleId, String userName, NotificationType type, String message) {
         create(vehicleId, userName, type, null, message);
+    }
+
+    public void create(UUID vehicleId, String userName, NotificationType type, int description, String message) {
+        create(vehicleId, userName, type, String.valueOf(description), message);
     }
 
     public void create(UUID vehicleId, String userName, NotificationType type, String description, String message) {
@@ -117,6 +125,10 @@ public class NotificationService {
         return isExist(vehicleId, type, null);
     }
 
+    public boolean isExist(UUID vehicleId, NotificationType type, int description) {
+        return isExist(vehicleId, type, String.valueOf(description));
+    }
+
     public boolean isExist(UUID vehicleId, NotificationType type, String description) {
         Assert.notNull(vehicleId);
         Assert.notNull(type);
@@ -133,12 +145,38 @@ public class NotificationService {
     }
 
     /**
+     * 获取所有满足条件的通知
+     * @param vehicleId 车辆的ID
+     * @param type 通知类型
+     * @return
+     */
+    public List<Notification> get(UUID vehicleId, NotificationType type) {
+        Assert.notNull(vehicleId);
+        Assert.notNull(type);
+
+        List<Notification> resultList = new ArrayList<>();
+        List<Notification> notificationList = notificationDAO.getByVehicleId(vehicleId);
+        for (Notification notification : notificationList) {
+            if (type.equals(notification.getType())) {
+                resultList.add(notification);
+            }
+        }
+
+        return resultList;
+    }
+
+
+    /**
      * 删除一个通知
      * @param vehicleId 车辆的ID
      * @param type 通知的类型
      */
     public void delete(UUID vehicleId, NotificationType type) {
         delete(vehicleId, type, null);
+    }
+
+    public void delete(UUID vehicleId, NotificationType type, int description) {
+        delete(vehicleId, type, String.valueOf(description));
     }
 
     public void delete(UUID vehicleId, NotificationType type, String description) {

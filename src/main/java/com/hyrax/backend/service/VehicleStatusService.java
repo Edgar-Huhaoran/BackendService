@@ -2,6 +2,7 @@ package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleStatusDAO;
+import com.hyrax.backend.entity.Notification;
 import com.hyrax.backend.entity.NotificationType;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.exception.ErrorType;
@@ -124,7 +125,43 @@ public class VehicleStatusService {
      * @param status
      */
     private void checkMileage(VehicleStatus status) {
+        UUID vehicleId = status.getId();
+        String userName = status.getUserName();
+        float mileage = status.getMileage();
 
+        int currentLevel = (int)mileage / 15000;
+        clearMileageNotification(vehicleId, userName, currentLevel);
+        if (currentLevel == 0) {
+            return;
+        }
+
+        boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.MILEAGE_ACHIEVE, currentLevel);
+        if (!isNotifyExist) {
+            log.info("notify user {} with notification {} level {} ", userName, NotificationType.MILEAGE_ACHIEVE, currentLevel);
+            notificationService.push(userName);
+            String[] messages = NotificationType.MILEAGE_ACHIEVE.getMessages();
+            String message = messages[0] + currentLevel * 15000 + messages[1];
+            notificationService.create(vehicleId, userName, NotificationType.MILEAGE_ACHIEVE, currentLevel, message);
+        }
+
+    }
+
+    /**
+     * 删除超过当前里程的通知
+     * @param vehicleId
+     * @param userName
+     * @param currentLevel
+     */
+    private void clearMileageNotification(UUID vehicleId, String userName, int currentLevel) {
+        List<Notification> notificationList = notificationService.get(vehicleId, NotificationType.MILEAGE_ACHIEVE);
+        for (Notification notification : notificationList) {
+            int notificationLevel = Integer.valueOf(notification.getDescription());
+            if (notificationLevel > currentLevel) {
+                log.info("delete notification {} level {} for user {}", NotificationType.MILEAGE_ACHIEVE,
+                         notification.getDescription(), userName);
+                notificationService.delete(vehicleId, NotificationType.MILEAGE_ACHIEVE, notificationLevel);
+            }
+        }
     }
 
     /**
