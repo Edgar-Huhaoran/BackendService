@@ -35,12 +35,8 @@ public class VehicleService {
     private final VehicleDAO vehicleDAO;
     private final VehicleStatusService vehicleStatusService;
 
-    @Value("${server.protocol}")
-    private String protocol;
-    @Value("${server.address}")
-    private String address;
-    @Value("${server.port}")
-    private String port;
+    @Value("${hyrax.server.address}")
+    private String serverAddress;
 
     @Autowired
     public VehicleService(VehicleDAO vehicleDAO,
@@ -60,7 +56,7 @@ public class VehicleService {
         UUID id = UUID.randomUUID();
         String userName = UserContextHolder.getUserName();
 
-        String markUrl = protocol + "://" + address + ":" + port + MARK_RESOURCE_URL + "/" + id.toString();
+        String markUrl = serverAddress + MARK_RESOURCE_URL + "/" + id.toString();
         Vehicle vehicle = Vehicle.newInstance()
                 .withId(id)
                 .withUserName(userName)
