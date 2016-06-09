@@ -152,7 +152,6 @@ public class VehicleService {
 
     private void assertValid(VehicleDTO vehicleDTO) {
         if(vehicleDTO.getBrand() == null || vehicleDTO.getBrand().isEmpty() ||
-                vehicleDTO.getMark() == null || vehicleDTO.getMark().isEmpty() ||
                 vehicleDTO.getModel() == null || vehicleDTO.getModel().isEmpty() ||
                 vehicleDTO.getNumber() == null || vehicleDTO.getNumber().isEmpty() ||
                 vehicleDTO.getEngine() == null || vehicleDTO.getEngine().isEmpty() ||

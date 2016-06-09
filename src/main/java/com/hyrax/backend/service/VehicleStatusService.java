@@ -5,6 +5,9 @@ import com.hyrax.backend.dao.VehicleStatusDAO;
 import com.hyrax.backend.entity.Notification;
 import com.hyrax.backend.entity.NotificationType;
 import com.hyrax.backend.entity.VehicleStatus;
+import com.hyrax.backend.entity.state.EngineState;
+import com.hyrax.backend.entity.state.HeadlightState;
+import com.hyrax.backend.entity.state.TransmissionState;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
 import org.slf4j.Logger;
@@ -86,6 +89,8 @@ public class VehicleStatusService {
         return vehicleStatusList;
     }
 
+
+    // =================================== 检测汽车状态的方法 ================================== //
     /**
      * 检查汽车状态
      */
@@ -114,7 +119,7 @@ public class VehicleStatusService {
             String[] messages = NotificationType.FUEL_UNDER.getMessages();
             String message = messages[0];
             notificationService.create(vehicleId, userName, NotificationType.FUEL_UNDER, message);
-        } else if (gasoline >= 20.0F && isNotifyExist){
+        } else if (gasoline >= 20.0F && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.FUEL_UNDER, userName);
             notificationService.delete(vehicleId, NotificationType.FUEL_UNDER);
         }
@@ -169,9 +174,77 @@ public class VehicleStatusService {
      * @param status
      */
     private void checkEquipment(VehicleStatus status) {
+        UUID vehicleId = status.getId();
+        String userName = status.getUserName();
 
+        EngineState engineState = status.getEngineState();
+        checkEngineState(vehicleId, userName, engineState);
+
+        TransmissionState transmissionState = status.getTransmissionState();
+        checkTransmissionState(vehicleId, userName, transmissionState);
+
+        HeadlightState headlightState = status.getHeadlightState();
+        checkHeadlightState(vehicleId, userName, headlightState);
     }
 
+    /**
+     * 检测引擎测状态
+     * @param vehicleId
+     * @param userName
+     * @param engineState
+     */
+    private void checkEngineState(UUID vehicleId, String userName, EngineState engineState) {
+        boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.ENGINE_ABNORMAL);
+        if (EngineState.ABNORMAL.equals(engineState) && !isNotifyExist) {
+            log.info("notify user {} with notification {} ", userName, NotificationType.ENGINE_ABNORMAL);
+            notificationService.push(userName);
+            String[] messages = NotificationType.ENGINE_ABNORMAL.getMessages();
+            String message = messages[0];
+            notificationService.create(vehicleId, userName, NotificationType.ENGINE_ABNORMAL, message);
+        } else if (!EngineState.ABNORMAL.equals(engineState) && isNotifyExist) {
+            log.info("delete notification {} for user {}", NotificationType.ENGINE_ABNORMAL, userName);
+            notificationService.delete(vehicleId, NotificationType.ENGINE_ABNORMAL);
+        }
+    }
 
+    /**
+     * 检测转换器的状态
+     * @param vehicleId
+     * @param userName
+     * @param transmissionState
+     */
+    private void checkTransmissionState(UUID vehicleId, String userName, TransmissionState transmissionState) {
+        boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.TRANSMISSION_ABNORMAL);
+        if (TransmissionState.ABNORMAL.equals(transmissionState) && !isNotifyExist) {
+            log.info("notify user {} with notification {} ", userName, NotificationType.TRANSMISSION_ABNORMAL);
+            notificationService.push(userName);
+            String[] messages = NotificationType.TRANSMISSION_ABNORMAL.getMessages();
+            String message = messages[0];
+            notificationService.create(vehicleId, userName, NotificationType.TRANSMISSION_ABNORMAL, message);
+        } else if (!TransmissionState.ABNORMAL.equals(transmissionState) && isNotifyExist) {
+            log.info("delete notification {} for user {}", NotificationType.TRANSMISSION_ABNORMAL, userName);
+            notificationService.delete(vehicleId, NotificationType.TRANSMISSION_ABNORMAL);
+        }
+    }
+
+    /**
+     * 检测车灯的状态
+     * @param vehicleId
+     * @param userName
+     * @param headlightState
+     */
+    private void checkHeadlightState(UUID vehicleId, String userName, HeadlightState headlightState) {
+        boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.HEADLIGHT_ABNORMAL);
+        if (HeadlightState.BAD.equals(headlightState) && !isNotifyExist) {
+            log.info("notify user {} with notification {} ", userName, NotificationType.HEADLIGHT_ABNORMAL);
+            notificationService.push(userName);
+            String[] messages = NotificationType.HEADLIGHT_ABNORMAL.getMessages();
+            String message = messages[0];
+            notificationService.create(vehicleId, userName, NotificationType.HEADLIGHT_ABNORMAL, message);
+        } else if (!HeadlightState.BAD.equals(headlightState) && isNotifyExist) {
+            log.info("delete notification {} for user {}", NotificationType.HEADLIGHT_ABNORMAL, userName);
+            notificationService.delete(vehicleId, NotificationType.HEADLIGHT_ABNORMAL);
+        }
+    }
 
 }
