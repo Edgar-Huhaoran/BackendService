@@ -1,10 +1,12 @@
 package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
+import com.hyrax.backend.dao.VehicleDAO;
 import com.hyrax.backend.dao.VehicleStatusDAO;
 import com.hyrax.backend.dto.VehicleStatusDTO;
 import com.hyrax.backend.entity.Notification;
 import com.hyrax.backend.entity.NotificationType;
+import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.entity.state.EngineState;
 import com.hyrax.backend.entity.state.HeadlightState;
@@ -25,11 +27,15 @@ public class VehicleStatusService {
 
     private static final Logger log = LoggerFactory.getLogger(VehicleStatusService.class);
 
+    private final VehicleDAO vehicleDAO;
     private final VehicleStatusDAO vehicleStatusDAO;
     private final NotificationService notificationService;
 
     @Autowired
-    public VehicleStatusService(VehicleStatusDAO vehicleStatusDAO, NotificationService notificationService) {
+    public VehicleStatusService(VehicleDAO vehicleDAO,
+                                VehicleStatusDAO vehicleStatusDAO,
+                                NotificationService notificationService) {
+        this.vehicleDAO = vehicleDAO;
         this.vehicleStatusDAO = vehicleStatusDAO;
         this.notificationService = notificationService;
     }
@@ -87,7 +93,9 @@ public class VehicleStatusService {
             throw new HyraxException(ErrorType.NO_PERMISSION);
         }
 
-        return VehicleStatusDTO.fromVehicleStatus(vehicleStatus);
+        VehicleStatusDTO vehicleStatusDTO = VehicleStatusDTO.fromVehicleStatus(vehicleStatus);
+        float maintainCycle = vehicleDAO.get(id).getMaintainCycle();
+        return VehicleStatusDTO.generateMessage(vehicleStatusDTO, maintainCycle);
     }
 
     /**
@@ -100,7 +108,9 @@ public class VehicleStatusService {
         List<VehicleStatusDTO> vehicleStatusDTOList = new ArrayList<>();
 
         for (VehicleStatus vehicleStatus : vehicleStatusList) {
-            vehicleStatusDTOList.add(VehicleStatusDTO.fromVehicleStatus(vehicleStatus));
+            VehicleStatusDTO vehicleStatusDTO = VehicleStatusDTO.fromVehicleStatus(vehicleStatus);
+            float maintainCycle = vehicleDAO.get(vehicleStatus.getId()).getMaintainCycle();
+            vehicleStatusDTOList.add(VehicleStatusDTO.generateMessage(vehicleStatusDTO, maintainCycle));
         }
         return vehicleStatusDTOList;
     }

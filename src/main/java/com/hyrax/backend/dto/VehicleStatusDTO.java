@@ -26,7 +26,7 @@ public class VehicleStatusDTO {
     }
 
     public static VehicleStatusDTO fromVehicleStatus(VehicleStatus vehicleStatus) {
-        VehicleStatusDTO vehicleStatusDTO = VehicleStatusDTO.newInstance()
+        return VehicleStatusDTO.newInstance()
                 .withId(vehicleStatus.getId())
                 .withUserName(vehicleStatus.getUserName())
                 .withMileage(vehicleStatus.getMileage())
@@ -37,7 +37,6 @@ public class VehicleStatusDTO {
                 .withLastMileage(vehicleStatus.getLastMileage())
                 .withEngineOil(vehicleStatus.getEngineOil())
                 .withCleanFluid(vehicleStatus.getCleanFluid());
-        return generateMessage(vehicleStatusDTO);
     }
 
     public UUID getId() {
@@ -183,7 +182,7 @@ public class VehicleStatusDTO {
         return this;
     }
 
-    public static VehicleStatusDTO generateMessage(VehicleStatusDTO vehicleStatusDTO) {
+    public static VehicleStatusDTO generateMessage(VehicleStatusDTO vehicleStatusDTO, float maintainCycle) {
         String message;
         if (EngineState.ABNORMAL.equals(vehicleStatusDTO.getEngineState())) {
             message = "发动机异常,快去修理吧 =￣ω￣= ";
@@ -193,7 +192,7 @@ public class VehicleStatusDTO {
             message = "呀,车灯坏了...";
         } else if (vehicleStatusDTO.getGasoline() < 20.0f) {
             message = "油量低于20% /(ㄒ_ㄒ)/~~";
-        } else if (vehicleStatusDTO.getMileage() - vehicleStatusDTO.getLastMileage() > 15000) {
+        } else if (vehicleStatusDTO.getMileage() - vehicleStatusDTO.getLastMileage() > maintainCycle) {
             message = "是时候该来一次保养了";
         } else if (vehicleStatusDTO.getEngineOil() < 20.0f) {
             message = "机油低于20%";
