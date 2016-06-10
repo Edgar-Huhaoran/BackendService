@@ -29,20 +29,18 @@ import javax.imageio.ImageIO;
 public class VehicleService {
 
     private static final Logger log = LoggerFactory.getLogger(VehicleService.class);
-    private static final String MARK_RESOURCE_PATH = "mark/";
-    private static final String MARK_RESOURCE_URL = "/vehicle/mark";
 
     private final VehicleDAO vehicleDAO;
     private final VehicleStatusService vehicleStatusService;
-
-    @Value("${hyrax.server.address}")
-    private String serverAddress;
+    private final MarkService markService;
 
     @Autowired
     public VehicleService(VehicleDAO vehicleDAO,
-                          VehicleStatusService vehicleStatusService) {
+                          VehicleStatusService vehicleStatusService,
+                          MarkService markService) {
         this.vehicleDAO = vehicleDAO;
         this.vehicleStatusService = vehicleStatusService;
+        this.markService = markService;
     }
 
     /**
@@ -56,11 +54,12 @@ public class VehicleService {
         UUID id = UUID.randomUUID();
         String userName = UserContextHolder.getUserName();
 
-        String markUrl = serverAddress + MARK_RESOURCE_URL + "/" + vehicleDTO.getBrand() + "/noToken";
+        String brand = vehicleDTO.getBrand();
+        String markUrl = markService.getUrl(brand);
         Vehicle vehicle = Vehicle.newInstance()
                 .withId(id)
                 .withUserName(userName)
-                .withBrand(vehicleDTO.getBrand())
+                .withBrand(brand)
                 .withMark(markUrl)
                 .withModel(vehicleDTO.getModel())
                 .withNumber(vehicleDTO.getNumber())
@@ -126,27 +125,6 @@ public class VehicleService {
         }
 
         return 0;
-    }
-
-    /**
-     * 获取车标图片
-     * @param markName 图片名称
-     * @return
-     */
-    public byte[] getMark(String markName) {
-        markName = markName + ".jpg";
-
-        try {
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_RESOURCE_PATH + markName));
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", bos);
-
-            return bos.toByteArray();
-        } catch (IOException | IllegalArgumentException e) {
-            log.warn("get vehicle mark failed ", e);
-            throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
-        }
     }
 
     private void assertValid(VehicleDTO vehicleDTO) {

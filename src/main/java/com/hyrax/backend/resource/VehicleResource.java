@@ -3,6 +3,7 @@ package com.hyrax.backend.resource;
 import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
+import com.hyrax.backend.service.MarkService;
 import com.hyrax.backend.service.VehicleService;
 import com.hyrax.backend.service.VehicleStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,15 @@ public class VehicleResource {
 
     private final VehicleService vehicleService;
     private final VehicleStatusService vehicleStatusService;
+    private final MarkService markService;
 
     @Autowired
-    public VehicleResource(VehicleService vehicleService, VehicleStatusService vehicleStatusService) {
+    public VehicleResource(VehicleService vehicleService,
+                           VehicleStatusService vehicleStatusService,
+                           MarkService markService) {
         this.vehicleService = vehicleService;
         this.vehicleStatusService = vehicleStatusService;
+        this.markService = markService;
     }
 
     @GET
@@ -82,10 +87,10 @@ public class VehicleResource {
     }
 
     @GET
-    @Path("/mark/{markName}/noToken")
+    @Path("/mark/{icon}/noToken")
     @Produces({"image/png", "image/jpg"})
-    public Response getFullImage(@PathParam("markName") String markName) {
-        byte[] imageBytes = vehicleService.getMark(markName);
+    public Response getFullImage(@PathParam("icon") String icon) {
+        byte[] imageBytes = markService.getMark(icon);
         return Response.ok(imageBytes).build();
     }
 
