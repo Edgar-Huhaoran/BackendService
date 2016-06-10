@@ -94,7 +94,7 @@ public class VehicleStatusService {
         }
 
         VehicleStatusDTO vehicleStatusDTO = VehicleStatusDTO.fromVehicleStatus(vehicleStatus);
-        float maintainCycle = vehicleDAO.get(id).getMaintainCycle();
+        int maintainCycle = vehicleDAO.get(id).getMaintainCycle();
         return VehicleStatusDTO.generateMessage(vehicleStatusDTO, maintainCycle);
     }
 
@@ -109,7 +109,7 @@ public class VehicleStatusService {
 
         for (VehicleStatus vehicleStatus : vehicleStatusList) {
             VehicleStatusDTO vehicleStatusDTO = VehicleStatusDTO.fromVehicleStatus(vehicleStatus);
-            float maintainCycle = vehicleDAO.get(vehicleStatus.getId()).getMaintainCycle();
+            int maintainCycle = vehicleDAO.get(vehicleStatus.getId()).getMaintainCycle();
             vehicleStatusDTOList.add(VehicleStatusDTO.generateMessage(vehicleStatusDTO, maintainCycle));
         }
         return vehicleStatusDTOList;
@@ -136,16 +136,16 @@ public class VehicleStatusService {
     private void checkGasoline(VehicleStatus status) {
         UUID vehicleId = status.getId();
         String userName = status.getUserName();
-        float gasoline = status.getGasoline();
+        int gasoline = status.getGasoline();
 
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.FUEL_UNDER);
-        if (gasoline < 20.0F && !isNotifyExist) {
+        if (gasoline < 20 && !isNotifyExist) {
             log.info("notify user {} with notification {} ", userName, NotificationType.FUEL_UNDER);
             notificationService.push(userName);
             String[] messages = NotificationType.FUEL_UNDER.getMessages();
             String message = messages[0];
             notificationService.create(vehicleId, userName, NotificationType.FUEL_UNDER, message);
-        } else if (gasoline >= 20.0F && isNotifyExist) {
+        } else if (gasoline >= 20 && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.FUEL_UNDER, userName);
             notificationService.delete(vehicleId, NotificationType.FUEL_UNDER);
         }
@@ -158,7 +158,7 @@ public class VehicleStatusService {
     private void checkMileage(VehicleStatus status) {
         UUID vehicleId = status.getId();
         String userName = status.getUserName();
-        float mileage = status.getMileage();
+        int mileage = status.getMileage();
 
         int currentLevel = (int)mileage / 15000;
         clearMileageNotification(vehicleId, userName, currentLevel);

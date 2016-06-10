@@ -89,7 +89,7 @@ public class JdbcVehicleDAO implements VehicleDAO {
                     .withSeatNum(rs.getInt("seat_num"))
                     .withCreateTime(rs.getTimestamp("create_time"))
                     .withModifyTime(rs.getTimestamp("modify_time"))
-                    .withGasCapacity(rs.getFloat("gas_capacity"))
+                    .withGasCapacity(rs.getInt("gas_capacity"))
                     .withMaintainCycle(rs.getInt("maintain_cycle"));
         }
     };

@@ -11,14 +11,14 @@ public class VehicleStatusDTO {
 
     private UUID id;
     private String userName;
-    private float mileage;
-    private float gasoline;
+    private int mileage;
+    private int gasoline;
     private EngineState engineState;
     private TransmissionState transmissionState;
     private HeadlightState headlightState;
-    private float lastMileage;
-    private float engineOil;
-    private float cleanFluid;
+    private int lastMileage;
+    private int engineOil;
+    private int cleanFluid;
     private String message;
 
     public static VehicleStatusDTO newInstance() {
@@ -55,19 +55,19 @@ public class VehicleStatusDTO {
         this.userName = userName;
     }
 
-    public float getMileage() {
+    public int getMileage() {
         return mileage;
     }
 
-    public void setMileage(float mileage) {
+    public void setMileage(int mileage) {
         this.mileage = mileage;
     }
 
-    public float getGasoline() {
+    public int getGasoline() {
         return gasoline;
     }
 
-    public void setGasoline(float gasoline) {
+    public void setGasoline(int gasoline) {
         this.gasoline = gasoline;
     }
 
@@ -95,27 +95,27 @@ public class VehicleStatusDTO {
         this.headlightState = headlightState;
     }
 
-    public float getLastMileage() {
+    public int getLastMileage() {
         return lastMileage;
     }
 
-    public void setLastMileage(float lastMileage) {
+    public void setLastMileage(int lastMileage) {
         this.lastMileage = lastMileage;
     }
 
-    public float getEngineOil() {
+    public int getEngineOil() {
         return engineOil;
     }
 
-    public void setEngineOil(float engineOil) {
+    public void setEngineOil(int engineOil) {
         this.engineOil = engineOil;
     }
 
-    public float getCleanFluid() {
+    public int getCleanFluid() {
         return cleanFluid;
     }
 
-    public void setCleanFluid(float cleanFluid) {
+    public void setCleanFluid(int cleanFluid) {
         this.cleanFluid = cleanFluid;
     }
 
@@ -137,12 +137,12 @@ public class VehicleStatusDTO {
         return this;
     }
 
-    public VehicleStatusDTO withMileage(float mileage) {
+    public VehicleStatusDTO withMileage(int mileage) {
         this.setMileage(mileage);
         return this;
     }
 
-    public VehicleStatusDTO withGasoline(float gasoline) {
+    public VehicleStatusDTO withGasoline(int gasoline) {
         this.setGasoline(gasoline);
         return this;
     }
@@ -162,17 +162,17 @@ public class VehicleStatusDTO {
         return this;
     }
 
-    public VehicleStatusDTO withLastMileage(float lastMileage) {
+    public VehicleStatusDTO withLastMileage(int lastMileage) {
         this.setLastMileage(lastMileage);
         return this;
     }
 
-    public VehicleStatusDTO withEngineOil(float engineOil) {
+    public VehicleStatusDTO withEngineOil(int engineOil) {
         this.setEngineOil(engineOil);
         return this;
     }
 
-    public VehicleStatusDTO withCleanFluid(float cleanFluid) {
+    public VehicleStatusDTO withCleanFluid(int cleanFluid) {
         this.setCleanFluid(cleanFluid);
         return this;
     }
@@ -182,7 +182,7 @@ public class VehicleStatusDTO {
         return this;
     }
 
-    public static VehicleStatusDTO generateMessage(VehicleStatusDTO vehicleStatusDTO, float maintainCycle) {
+    public static VehicleStatusDTO generateMessage(VehicleStatusDTO vehicleStatusDTO, int maintainCycle) {
         String message;
         if (EngineState.ABNORMAL.equals(vehicleStatusDTO.getEngineState())) {
             message = "发动机异常,快去修理吧 =￣ω￣= ";
@@ -190,13 +190,13 @@ public class VehicleStatusDTO {
             message = "变速器好像有点问题哎~";
         } else if (HeadlightState.ABNORMAL.equals(vehicleStatusDTO.getHeadlightState())) {
             message = "呀,车灯坏了...";
-        } else if (vehicleStatusDTO.getGasoline() < 20.0f) {
+        } else if (vehicleStatusDTO.getGasoline() < 20) {
             message = "油量低于20% /(ㄒ_ㄒ)/~~";
         } else if (vehicleStatusDTO.getMileage() - vehicleStatusDTO.getLastMileage() > maintainCycle) {
             message = "是时候来一次保养了";
-        } else if (vehicleStatusDTO.getEngineOil() < 20.0f) {
+        } else if (vehicleStatusDTO.getEngineOil() < 20) {
             message = "机油低于20%";
-        } else if (vehicleStatusDTO.getCleanFluid() < 20.0f) {
+        } else if (vehicleStatusDTO.getCleanFluid() < 20) {
             message = "清洁液低于20%";
         } else {
             message = "状态不错哦~ O(∩_∩)O~~";

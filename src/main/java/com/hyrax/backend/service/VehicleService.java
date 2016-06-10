@@ -143,16 +143,16 @@ public class VehicleService {
         VehicleStatus vehicleStatus = VehicleStatus.newInstance()
                 .withId(vehicleId)
                 .withUserName(userName)
-                .withMileage(0.0F)
+                .withMileage(1)
                 .withGasoline(100)
                 .withEngineState(EngineState.GREAT)
                 .withTransmissionState(TransmissionState.GREAT)
                 .withHeadlightState(HeadlightState.GREAT)
                 .withCreateTime(new Timestamp(System.currentTimeMillis()))
                 .withModifyTime(new Timestamp(System.currentTimeMillis()))
-                .withLastMileage(0.0F)
-                .withEngineOil(100.0F)
-                .withCleanFluid(100.0F);
+                .withLastMileage(1)
+                .withEngineOil(100)
+                .withCleanFluid(100);
         vehicleStatusService.create(vehicleStatus);
     }
 

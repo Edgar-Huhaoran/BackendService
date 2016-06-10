@@ -11,16 +11,16 @@ public class VehicleStatus {
 
     private UUID id;
     private String userName;
-    private float mileage;
-    private float gasoline;
+    private int mileage;
+    private int gasoline;
     private EngineState engineState;
     private TransmissionState transmissionState;
     private HeadlightState headlightState;
     private Timestamp createTime;
     private Timestamp modifyTime;
-    private float lastMileage;
-    private float engineOil;
-    private float cleanFluid;
+    private int lastMileage;
+    private int engineOil;
+    private int cleanFluid;
 
     public static VehicleStatus newInstance() {
         return new VehicleStatus();
@@ -42,19 +42,19 @@ public class VehicleStatus {
         this.userName = userName;
     }
 
-    public float getMileage() {
+    public int getMileage() {
         return mileage;
     }
 
-    public void setMileage(float mileage) {
+    public void setMileage(int mileage) {
         this.mileage = mileage;
     }
 
-    public float getGasoline() {
+    public int getGasoline() {
         return gasoline;
     }
 
-    public void setGasoline(float gasoline) {
+    public void setGasoline(int gasoline) {
         this.gasoline = gasoline;
     }
 
@@ -98,27 +98,27 @@ public class VehicleStatus {
         this.modifyTime = modifyTime;
     }
 
-    public float getLastMileage() {
+    public int getLastMileage() {
         return lastMileage;
     }
 
-    public void setLastMileage(float lastMileage) {
+    public void setLastMileage(int lastMileage) {
         this.lastMileage = lastMileage;
     }
 
-    public float getEngineOil() {
+    public int getEngineOil() {
         return engineOil;
     }
 
-    public void setEngineOil(float engineOil) {
+    public void setEngineOil(int engineOil) {
         this.engineOil = engineOil;
     }
 
-    public float getCleanFluid() {
+    public int getCleanFluid() {
         return cleanFluid;
     }
 
-    public void setCleanFluid(float cleanFluid) {
+    public void setCleanFluid(int cleanFluid) {
         this.cleanFluid = cleanFluid;
     }
 
@@ -132,12 +132,12 @@ public class VehicleStatus {
         return this;
     }
 
-    public VehicleStatus withMileage(float mileage) {
+    public VehicleStatus withMileage(int mileage) {
         this.setMileage(mileage);
         return this;
     }
 
-    public VehicleStatus withGasoline(float gasoline) {
+    public VehicleStatus withGasoline(int gasoline) {
         this.setGasoline(gasoline);
         return this;
     }
@@ -167,17 +167,17 @@ public class VehicleStatus {
         return this;
     }
 
-    public VehicleStatus withLastMileage(float lastMileage) {
+    public VehicleStatus withLastMileage(int lastMileage) {
         this.setLastMileage(lastMileage);
         return this;
     }
 
-    public VehicleStatus withEngineOil(float engineOil) {
+    public VehicleStatus withEngineOil(int engineOil) {
         this.setEngineOil(engineOil);
         return this;
     }
 
-    public VehicleStatus withCleanFluid(float cleanFluid) {
+    public VehicleStatus withCleanFluid(int cleanFluid) {
         this.setCleanFluid(cleanFluid);
         return this;
     }

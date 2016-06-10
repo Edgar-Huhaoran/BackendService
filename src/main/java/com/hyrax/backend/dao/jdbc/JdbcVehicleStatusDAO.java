@@ -114,16 +114,16 @@ public class JdbcVehicleStatusDAO implements VehicleStatusDAO {
             return VehicleStatus.newInstance()
                     .withId(UUID.fromString(rs.getString("id")))
                     .withUserName(rs.getString("user_name"))
-                    .withMileage(rs.getFloat("mileage"))
-                    .withGasoline(rs.getFloat("gasoline"))
+                    .withMileage(rs.getInt("mileage"))
+                    .withGasoline(rs.getInt("gasoline"))
                     .withEngineState(EngineState.valueOf(rs.getString("engine_state")))
                     .withTransmissionState(TransmissionState.valueOf(rs.getString("transmission_state")))
                     .withHeadlightState(HeadlightState.valueOf(rs.getString("headlight_state")))
                     .withCreateTime(rs.getTimestamp("create_time"))
                     .withModifyTime(rs.getTimestamp("modify_time"))
-                    .withLastMileage(rs.getFloat("last_mileage"))
-                    .withEngineOil(rs.getFloat("engine_oil"))
-                    .withCleanFluid(rs.getFloat("clean_fluid"));
+                    .withLastMileage(rs.getInt("last_mileage"))
+                    .withEngineOil(rs.getInt("engine_oil"))
+                    .withCleanFluid(rs.getInt("clean_fluid"));
         }
     };
 

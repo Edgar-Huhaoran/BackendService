@@ -16,7 +16,7 @@ public class Vehicle {
     private int seatNum;
     private Timestamp createTime;
     private Timestamp modifyTime;
-    private float gasCapacity;
+    private int gasCapacity;
     private int maintainCycle;
 
     public static Vehicle newInstance() {
@@ -111,11 +111,11 @@ public class Vehicle {
         this.modifyTime = modifyTime;
     }
 
-    public float getGasCapacity() {
+    public int getGasCapacity() {
         return gasCapacity;
     }
 
-    public void setGasCapacity(float gasCapacity) {
+    public void setGasCapacity(int gasCapacity) {
         this.gasCapacity = gasCapacity;
     }
 
@@ -182,7 +182,7 @@ public class Vehicle {
         return this;
     }
 
-    public Vehicle withGasCapacity(float gasCapacity) {
+    public Vehicle withGasCapacity(int gasCapacity) {
         this.setGasCapacity(gasCapacity);
         return this;
     }
