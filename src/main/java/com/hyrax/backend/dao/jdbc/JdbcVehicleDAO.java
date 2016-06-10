@@ -24,8 +24,8 @@ public class JdbcVehicleDAO implements VehicleDAO {
     }
 
     public int save(Vehicle vehicle) {
-        String sql = "INSERT INTO vehicle(id, user_name, brand, mark, model, number, engine, door_num, seat_num, create_time, modify_time, gas_capacity, maintain_cycle) " +
-                "VALUES (:id, :user_name, :brand, :mark, :model, :number, :engine, :door_num, :seat_num, :create_time, :modify_time, :gas_capacity, :maintain_cycle)";
+        String sql = "INSERT INTO vehicle(id, user_name, brand, mark, model, number, engine, door_num, seat_num, create_time, modify_time, gas_capacity, maintain_cycle, car_frame) " +
+                "VALUES (:id, :user_name, :brand, :mark, :model, :number, :engine, :door_num, :seat_num, :create_time, :modify_time, :gas_capacity, :maintain_cycle, :car_frame)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", vehicle.getId())
@@ -40,7 +40,8 @@ public class JdbcVehicleDAO implements VehicleDAO {
                 .addValue("create_time", vehicle.getCreateTime())
                 .addValue("modify_time", vehicle.getModifyTime())
                 .addValue("gas_capacity", vehicle.getGasCapacity())
-                .addValue("maintain_cycle", vehicle.getMaintainCycle());
+                .addValue("maintain_cycle", vehicle.getMaintainCycle())
+                .addValue("car_frame", vehicle.getCarFrame());
 
         return namedTemplate.update(sql, parameterSource);
     }
@@ -90,7 +91,8 @@ public class JdbcVehicleDAO implements VehicleDAO {
                     .withCreateTime(rs.getTimestamp("create_time"))
                     .withModifyTime(rs.getTimestamp("modify_time"))
                     .withGasCapacity(rs.getInt("gas_capacity"))
-                    .withMaintainCycle(rs.getInt("maintain_cycle"));
+                    .withMaintainCycle(rs.getInt("maintain_cycle"))
+                    .withCarFrame(rs.getString("car_frame"));
         }
     };
 

@@ -15,6 +15,7 @@ public class VehicleDTO {
     private int seatNum;
     private int gasCapacity;
     private int maintainCycle;
+    private String carFrame;
 
     public UUID getId() {
         return id;
@@ -102,5 +103,13 @@ public class VehicleDTO {
 
     public void setMaintainCycle(int maintainCycle) {
         this.maintainCycle = maintainCycle;
+    }
+
+    public String getCarFrame() {
+        return carFrame;
+    }
+
+    public void setCarFrame(String carFrame) {
+        this.carFrame = carFrame;
     }
 }

@@ -18,6 +18,7 @@ public class Vehicle {
     private Timestamp modifyTime;
     private int gasCapacity;
     private int maintainCycle;
+    private String carFrame;
 
     public static Vehicle newInstance() {
         return new Vehicle();
@@ -127,6 +128,14 @@ public class Vehicle {
         this.maintainCycle = maintainCycle;
     }
 
+    public String getCarFrame() {
+        return carFrame;
+    }
+
+    public void setCarFrame(String carFrame) {
+        this.carFrame = carFrame;
+    }
+
     public Vehicle withId(UUID id) {
         this.setId(id);
         return this;
@@ -189,6 +198,11 @@ public class Vehicle {
 
     public Vehicle withMaintainCycle(int maintainCycle) {
         this.setMaintainCycle(maintainCycle);
+        return this;
+    }
+
+    public Vehicle withCarFrame(String carFrame) {
+        this.setCarFrame(carFrame);
         return this;
     }
 }

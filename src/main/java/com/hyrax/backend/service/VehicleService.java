@@ -1,7 +1,6 @@
 package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
-import com.hyrax.backend.dao.NotificationDAO;
 import com.hyrax.backend.dao.VehicleDAO;
 import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.NotificationType;
@@ -68,7 +67,8 @@ public class VehicleService {
                 .withCreateTime(new Timestamp(System.currentTimeMillis()))
                 .withModifyTime(new Timestamp(System.currentTimeMillis()))
                 .withGasCapacity(vehicleDTO.getGasCapacity())
-                .withMaintainCycle(vehicleDTO.getMaintainCycle());
+                .withMaintainCycle(vehicleDTO.getMaintainCycle())
+                .withCarFrame(vehicleDTO.getCarFrame());
         vehicleDAO.save(vehicle);
 
         createVehicleStatus(id, userName);
