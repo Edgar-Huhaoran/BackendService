@@ -2,6 +2,7 @@ package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.VehicleStatusDAO;
+import com.hyrax.backend.dto.VehicleStatusDTO;
 import com.hyrax.backend.entity.Notification;
 import com.hyrax.backend.entity.NotificationType;
 import com.hyrax.backend.entity.VehicleStatus;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,7 +76,7 @@ public class VehicleStatusService {
      * @param id 被获取状态的汽车ID
      * @return
      */
-    public VehicleStatus getVehicleStatus(UUID id) {
+    public VehicleStatusDTO getVehicleStatus(UUID id) {
         if (id == null) {
             throw new HyraxException(ErrorType.ID_NULL);
         }
@@ -84,17 +86,23 @@ public class VehicleStatusService {
         if (!userName.equals(vehicleStatus.getUserName())) {
             throw new HyraxException(ErrorType.NO_PERMISSION);
         }
-        return vehicleStatus;
+
+        return VehicleStatusDTO.fromVehicleStatus(vehicleStatus);
     }
 
     /**
      * 获取当前用户的所有汽车状态数据
      * @return
      */
-    public List<VehicleStatus> getVehiclesStatus() {
+    public List<VehicleStatusDTO> getVehiclesStatus() {
         String userName = UserContextHolder.getUserName();
         List<VehicleStatus> vehicleStatusList = vehicleStatusDAO.getByUserName(userName);
-        return vehicleStatusList;
+        List<VehicleStatusDTO> vehicleStatusDTOList = new ArrayList<>();
+
+        for (VehicleStatus vehicleStatus : vehicleStatusList) {
+            vehicleStatusDTOList.add(VehicleStatusDTO.fromVehicleStatus(vehicleStatus));
+        }
+        return vehicleStatusDTOList;
     }
 
 

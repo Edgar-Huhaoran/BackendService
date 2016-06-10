@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MarkService {
 
+    /**
+     * 保存汽车品牌与车标图片之间的对应关系
+     */
     enum MarkEnum {
-
         SHANGHAI_DA_ZHONG("上海大众", "shanghai_da_zhong.jpg"),
         BAO_MA("宝马", "bao_ma.jpg"),
         AO_DI("奥迪", "ao_di.jpg"),
@@ -43,7 +45,6 @@ public class MarkService {
         public String getIcon() {
             return icon;
         }
-
     }
 
     private static final Logger log = LoggerFactory.getLogger(VehicleService.class);

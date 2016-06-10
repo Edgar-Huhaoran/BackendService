@@ -1,6 +1,7 @@
 package com.hyrax.backend.resource;
 
 import com.hyrax.backend.dto.VehicleDTO;
+import com.hyrax.backend.dto.VehicleStatusDTO;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.service.MarkService;
@@ -72,7 +73,7 @@ public class VehicleResource {
     @Path("/status/{vehicleId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVehicleStatus(@PathParam("vehicleId") UUID id) {
-        VehicleStatus vehicleStatus = vehicleStatusService.getVehicleStatus(id);
+        VehicleStatusDTO vehicleStatus = vehicleStatusService.getVehicleStatus(id);
         return Response.ok(vehicleStatus).build();
     }
 
@@ -80,9 +81,9 @@ public class VehicleResource {
     @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVehicleStatusList() {
-        List<VehicleStatus> vehicleStatusList = vehicleStatusService.getVehiclesStatus();
+        List<VehicleStatusDTO> vehicleStatusDTOList = vehicleStatusService.getVehiclesStatus();
         Map resultMap = new HashMap<>();
-        resultMap.put("vehicleStatusList", vehicleStatusList);
+        resultMap.put("vehicleStatusDTOList", vehicleStatusDTOList);
         return Response.ok(resultMap).build();
     }
 
