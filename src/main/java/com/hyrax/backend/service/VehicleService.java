@@ -1,8 +1,10 @@
 package com.hyrax.backend.service;
 
 import com.hyrax.backend.credential.UserContextHolder;
+import com.hyrax.backend.dao.NotificationDAO;
 import com.hyrax.backend.dao.VehicleDAO;
 import com.hyrax.backend.dto.VehicleDTO;
+import com.hyrax.backend.entity.NotificationType;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.entity.state.EngineState;
@@ -26,14 +28,17 @@ public class VehicleService {
 
     private final VehicleDAO vehicleDAO;
     private final VehicleStatusService vehicleStatusService;
+    private final NotificationService notificationService;
     private final MarkService markService;
 
     @Autowired
     public VehicleService(VehicleDAO vehicleDAO,
                           VehicleStatusService vehicleStatusService,
+                          NotificationService notificationService,
                           MarkService markService) {
         this.vehicleDAO = vehicleDAO;
         this.vehicleStatusService = vehicleStatusService;
+        this.notificationService = notificationService;
         this.markService = markService;
     }
 
@@ -109,11 +114,14 @@ public class VehicleService {
             throw new HyraxException(ErrorType.ID_NULL);
         }
 
-        vehicleStatusService.delete(id);
         String userName = UserContextHolder.getUserName();
-        List<Vehicle> vehicleList = vehicleDAO.getByUserName(userName);
+        List<Vehicle> vehicleList = vehicleDAO.getByUserName(userName);  //必须是属于当前用户的汽车才允许删除
         for (Vehicle vehicle : vehicleList) {
-            if (id.equals(vehicle.getId())) {
+            if (id.equals(vehicle.getId())) {  // 先删除通知,再删除状态,最后删除汽车数据
+                for (NotificationType type : NotificationType.values()) {
+                    notificationService.delete(id, type);
+                }
+                vehicleStatusService.delete(id);
                 return vehicleDAO.delete(id);
             }
         }

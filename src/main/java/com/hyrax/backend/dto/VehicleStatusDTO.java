@@ -193,7 +193,7 @@ public class VehicleStatusDTO {
         } else if (vehicleStatusDTO.getGasoline() < 20.0f) {
             message = "油量低于20% /(ㄒ_ㄒ)/~~";
         } else if (vehicleStatusDTO.getMileage() - vehicleStatusDTO.getLastMileage() > maintainCycle) {
-            message = "是时候该来一次保养了";
+            message = "是时候来一次保养了";
         } else if (vehicleStatusDTO.getEngineOil() < 20.0f) {
             message = "机油低于20%";
         } else if (vehicleStatusDTO.getCleanFluid() < 20.0f) {
