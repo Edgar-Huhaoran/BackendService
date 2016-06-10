@@ -3,31 +3,19 @@ package com.hyrax.backend.resource;
 import com.hyrax.backend.dto.VehicleDTO;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
-import com.hyrax.backend.exception.ErrorType;
-import com.hyrax.backend.exception.HyraxException;
 import com.hyrax.backend.service.VehicleService;
 import com.hyrax.backend.service.VehicleStatusService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.activation.MimetypesFileTypeMap;
-import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,18 +71,6 @@ public class VehicleResource {
         return Response.ok(vehicleStatus).build();
     }
 
-    // TODO: 仅用于测试的 API
-    @POST
-    @Path("/status/testApi")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response setVehicleStatus(VehicleStatus vehicleStatus) {
-        vehicleStatusService.update(vehicleStatus);
-        Map resultMap = new HashMap<>();
-        resultMap.put("vehicleId", vehicleStatus.getId().toString());
-        return Response.ok(resultMap).build();
-    }
-
     @GET
     @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)
@@ -106,11 +82,24 @@ public class VehicleResource {
     }
 
     @GET
-    @Path("/mark/{vehicleId}")
+    @Path("/mark/{markName}/noToken")
     @Produces({"image/png", "image/jpg"})
-    public Response getFullImage(@PathParam("vehicleId") UUID id) {
-        byte[] imageBytes = vehicleService.getMark(id);
+    public Response getFullImage(@PathParam("markName") String markName) {
+        byte[] imageBytes = vehicleService.getMark(markName);
         return Response.ok(imageBytes).build();
     }
 
+
+
+    // TODO: 仅用于测试的 API
+    @POST
+    @Path("/status/testApi")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response setVehicleStatus(VehicleStatus vehicleStatus) {
+        vehicleStatusService.update(vehicleStatus);
+        Map resultMap = new HashMap<>();
+        resultMap.put("vehicleId", vehicleStatus.getId().toString());
+        return Response.ok(resultMap).build();
+    }
 }

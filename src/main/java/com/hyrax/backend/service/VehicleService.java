@@ -56,7 +56,7 @@ public class VehicleService {
         UUID id = UUID.randomUUID();
         String userName = UserContextHolder.getUserName();
 
-        String markUrl = serverAddress + MARK_RESOURCE_URL + "/" + id.toString();
+        String markUrl = serverAddress + MARK_RESOURCE_URL + "/" + vehicleDTO.getBrand() + "/noToken";
         Vehicle vehicle = Vehicle.newInstance()
                 .withId(id)
                 .withUserName(userName)
@@ -129,17 +129,16 @@ public class VehicleService {
     }
 
     /**
-     * 根据汽车的ID获取车标图片
-     * @param id 汽车的ID
+     * 获取车标图片
+     * @param markName 图片名称
      * @return
      */
-    public byte[] getMark(UUID id) {
-        Vehicle vehicle = getVehicle(id);
-        String brand = vehicle.getBrand() + ".jpg";
+    public byte[] getMark(String markName) {
+        markName = markName + ".jpg";
 
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
-            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_RESOURCE_PATH + brand));
+            BufferedImage bufferedImage = ImageIO.read(classLoader.getResource(MARK_RESOURCE_PATH + markName));
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "png", bos);
 
