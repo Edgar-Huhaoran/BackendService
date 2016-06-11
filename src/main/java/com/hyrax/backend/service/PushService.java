@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyrax.backend.config.RestClientConfig.JPushClient;
 import com.hyrax.backend.dao.UserDAO;
+import com.hyrax.backend.dao.VehicleDAO;
 import com.hyrax.backend.dto.JPushDTO;
 import com.hyrax.backend.dto.NotificationDTO;
 import com.hyrax.backend.entity.User;
@@ -29,6 +30,7 @@ public class PushService {
     private static Logger log = LoggerFactory.getLogger(NotificationService.class);
 
     private final UserDAO userDAO;
+    private final VehicleDAO vehicleDAO;
     private final JPushClient jPushClient;
 
     @Value("${jpush.path}")
@@ -42,8 +44,10 @@ public class PushService {
 
     @Autowired
     public PushService(UserDAO userDAO,
+                       VehicleDAO vehicleDAO,
                        JPushClient jPushClient) {
         this.userDAO = userDAO;
+        this.vehicleDAO = vehicleDAO;
         this.jPushClient = jPushClient;
     }
 
@@ -95,9 +99,12 @@ public class PushService {
      * @return
      */
     private JPushDTO generateJPushDTO(String pushId, NotificationDTO notificationDTO) {
+        String vehicleNumber = vehicleDAO.get(notificationDTO.getVehicleId()).getNumber();
+        String message = notificationDTO.getMessage();
+
         JPushDTO.Notification.Android android = new JPushDTO.Notification.Android();
-        android.setAlert("这是 Alter");
-        android.setTitle(notificationDTO.getMessage());
+        android.setAlert(message);
+        android.setTitle(vehicleNumber);
         android.setBuilderId(1);
         android.setExtras(notificationDTO);
 

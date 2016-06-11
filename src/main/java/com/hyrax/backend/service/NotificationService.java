@@ -48,7 +48,12 @@ public class NotificationService {
         pushService.setPushId(userName, pushId);
         log.info("register pushAndUpdate id {} for user {}", pushId, userName);
 
-        // TODO : finish pushAndUpdate new notification logic
+        List<Notification> notificationList = notificationDAO.getByUserName(userName);
+        for (Notification notification : notificationList) {
+            if (!notification.isReaded()) {
+                pushAndUpdate(notification);
+            }
+        }
     }
 
     /**
@@ -71,50 +76,6 @@ public class NotificationService {
         notification.setReadTime(new Timestamp(System.currentTimeMillis()));
         notificationDAO.update(notification);
     }
-
-//    /**
-//     * 检查未读取的通知
-//     */
-//    public void check() {
-//        List<Notification> notifications = notificationDAO.getAll();
-//        Set<String> userNameSet = new HashSet<>();
-//
-//        for (Notification notification : notifications) {
-//            userNameSet.add(notification.getUserName());
-//        }
-//
-//        for (String userName : userNameSet) {
-//            List<Notification> notificationList = notificationDAO.getByUserName(userName);
-//            for (Notification notification : notificationList) {
-//                if (!notification.isReaded()) {
-//                    push(userName);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
-//    /**
-//     * 为当前用户获取所有未读的通知
-//     * @return 未读的通知
-//     */
-//    public List<NotificationDTO> read() {
-//        String userName = UserContextHolder.getUserName();
-//        List<Notification> notifications = notificationDAO.getByUserName(userName);
-//        List<NotificationDTO> notificationDTOs = new LinkedList<>();
-//
-//        log.info("read notifications for user {}", userName);
-//        for (Notification notification : notifications) {
-//            if (!notification.isReaded()) {
-//                notificationDTOs.add(NotificationDTO.fromNotification(notification));
-//                notification.setReaded(true);
-//                notification.setReadTime(new Timestamp(System.currentTimeMillis()));
-//                notificationDAO.update(notification);
-//            }
-//        }
-//
-//        return notificationDTOs;
-//    }
 
 
     // ====================================== 数据库操作 ====================================== //
