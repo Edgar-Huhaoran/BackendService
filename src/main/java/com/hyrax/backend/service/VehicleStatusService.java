@@ -6,7 +6,6 @@ import com.hyrax.backend.dao.VehicleStatusDAO;
 import com.hyrax.backend.dto.VehicleStatusDTO;
 import com.hyrax.backend.entity.Notification;
 import com.hyrax.backend.entity.NotificationType;
-import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.entity.VehicleStatus;
 import com.hyrax.backend.entity.state.EngineState;
 import com.hyrax.backend.entity.state.HeadlightState;
@@ -140,11 +139,12 @@ public class VehicleStatusService {
 
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.FUEL_UNDER);
         if (gasoline < 20 && !isNotifyExist) {
-            log.info("notify user {} with notification {} ", userName, NotificationType.FUEL_UNDER);
-            notificationService.push(userName);
             String[] messages = NotificationType.FUEL_UNDER.getMessages();
             String message = messages[0];
-            notificationService.create(vehicleId, userName, NotificationType.FUEL_UNDER, message);
+            Notification notification = notificationService.create(vehicleId, userName, NotificationType.FUEL_UNDER,
+                                                                 message);
+            log.info("notify user {} with notification {} ", userName, NotificationType.FUEL_UNDER);
+            notificationService.pushAndUpdate(notification);
         } else if (gasoline >= 20 && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.FUEL_UNDER, userName);
             notificationService.delete(vehicleId, NotificationType.FUEL_UNDER);
@@ -160,7 +160,7 @@ public class VehicleStatusService {
         String userName = status.getUserName();
         int mileage = status.getMileage();
 
-        int currentLevel = (int)mileage / 15000;
+        int currentLevel = mileage / 15000;
         clearMileageNotification(vehicleId, userName, currentLevel);
         if (currentLevel == 0) {
             return;
@@ -168,11 +168,12 @@ public class VehicleStatusService {
 
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.MILEAGE_ACHIEVE, currentLevel);
         if (!isNotifyExist) {
-            log.info("notify user {} with notification {} level {} ", userName, NotificationType.MILEAGE_ACHIEVE, currentLevel);
-            notificationService.push(userName);
             String[] messages = NotificationType.MILEAGE_ACHIEVE.getMessages();
             String message = messages[0] + currentLevel * 15000 + messages[1];
-            notificationService.create(vehicleId, userName, NotificationType.MILEAGE_ACHIEVE, currentLevel, message);
+            Notification notification = notificationService.create(vehicleId, userName, NotificationType
+                    .MILEAGE_ACHIEVE, currentLevel, message);
+            log.info("notify user {} with notification {} level {} ", userName, NotificationType.MILEAGE_ACHIEVE, currentLevel);
+            notificationService.pushAndUpdate(notification);
         }
 
     }
@@ -222,11 +223,12 @@ public class VehicleStatusService {
     private void checkEngineState(UUID vehicleId, String userName, EngineState engineState) {
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.ENGINE_ABNORMAL);
         if (EngineState.ABNORMAL.equals(engineState) && !isNotifyExist) {
-            log.info("notify user {} with notification {} ", userName, NotificationType.ENGINE_ABNORMAL);
-            notificationService.push(userName);
             String[] messages = NotificationType.ENGINE_ABNORMAL.getMessages();
             String message = messages[0];
-            notificationService.create(vehicleId, userName, NotificationType.ENGINE_ABNORMAL, message);
+            Notification notification = notificationService.create(vehicleId, userName, NotificationType
+                    .ENGINE_ABNORMAL, message);
+            log.info("notify user {} with notification {} ", userName, NotificationType.ENGINE_ABNORMAL);
+            notificationService.pushAndUpdate(notification);
         } else if (!EngineState.ABNORMAL.equals(engineState) && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.ENGINE_ABNORMAL, userName);
             notificationService.delete(vehicleId, NotificationType.ENGINE_ABNORMAL);
@@ -242,11 +244,12 @@ public class VehicleStatusService {
     private void checkTransmissionState(UUID vehicleId, String userName, TransmissionState transmissionState) {
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.TRANSMISSION_ABNORMAL);
         if (TransmissionState.ABNORMAL.equals(transmissionState) && !isNotifyExist) {
-            log.info("notify user {} with notification {} ", userName, NotificationType.TRANSMISSION_ABNORMAL);
-            notificationService.push(userName);
             String[] messages = NotificationType.TRANSMISSION_ABNORMAL.getMessages();
             String message = messages[0];
-            notificationService.create(vehicleId, userName, NotificationType.TRANSMISSION_ABNORMAL, message);
+            Notification notification = notificationService.create(vehicleId, userName, NotificationType
+                    .TRANSMISSION_ABNORMAL, message);
+            log.info("notify user {} with notification {} ", userName, NotificationType.TRANSMISSION_ABNORMAL);
+            notificationService.pushAndUpdate(notification);
         } else if (!TransmissionState.ABNORMAL.equals(transmissionState) && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.TRANSMISSION_ABNORMAL, userName);
             notificationService.delete(vehicleId, NotificationType.TRANSMISSION_ABNORMAL);
@@ -262,11 +265,12 @@ public class VehicleStatusService {
     private void checkHeadlightState(UUID vehicleId, String userName, HeadlightState headlightState) {
         boolean isNotifyExist = notificationService.isExist(vehicleId, NotificationType.HEADLIGHT_ABNORMAL);
         if (HeadlightState.ABNORMAL.equals(headlightState) && !isNotifyExist) {
-            log.info("notify user {} with notification {} ", userName, NotificationType.HEADLIGHT_ABNORMAL);
-            notificationService.push(userName);
             String[] messages = NotificationType.HEADLIGHT_ABNORMAL.getMessages();
             String message = messages[0];
-            notificationService.create(vehicleId, userName, NotificationType.HEADLIGHT_ABNORMAL, message);
+            Notification notification = notificationService.create(vehicleId, userName, NotificationType
+                    .HEADLIGHT_ABNORMAL, message);
+            log.info("notify user {} with notification {} ", userName, NotificationType.HEADLIGHT_ABNORMAL);
+            notificationService.pushAndUpdate(notification);
         } else if (!HeadlightState.ABNORMAL.equals(headlightState) && isNotifyExist) {
             log.info("delete notification {} for user {}", NotificationType.HEADLIGHT_ABNORMAL, userName);
             notificationService.delete(vehicleId, NotificationType.HEADLIGHT_ABNORMAL);

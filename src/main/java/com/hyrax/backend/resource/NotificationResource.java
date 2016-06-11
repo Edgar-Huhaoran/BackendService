@@ -29,15 +29,6 @@ public class NotificationResource {
         this.notificationService = notificationService;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getNotifications() {
-        List<NotificationDTO> notificationDTOList = notificationService.read();
-        Map resultMap = new HashMap<>();
-        resultMap.put("notificationDTOList", notificationDTOList);
-        return Response.ok(resultMap).build();
-    }
-
     @POST
     @Path("/pushId")
     @Consumes(MediaType.APPLICATION_JSON)

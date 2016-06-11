@@ -40,70 +40,81 @@ public class NotificationService {
      */
     public void registerPushId(String pushId) {
         if (pushId == null || "".equals(pushId)) {
-            log.info("skip push id register, cause of push id is empty");
+            log.info("skip pushAndUpdate id register, cause of pushAndUpdate id is empty");
             return;
         }
 
         String userName = UserContextHolder.getUserName();
         pushService.setPushId(userName, pushId);
-        log.info("register push id {} for user {}", pushId, userName);
+        log.info("register pushAndUpdate id {} for user {}", pushId, userName);
 
-        // TODO : finish push new notification logic
+        // TODO : finish pushAndUpdate new notification logic
     }
 
     /**
-     * 检查未读取的通知
+     * 推送消息
+     * @param notification
      */
-    public void check() {
-        List<Notification> notifications = notificationDAO.getAll();
-        Set<String> userNameSet = new HashSet<>();
+    public void pushAndUpdate(Notification notification) {
+        NotificationDTO notificationDTO = NotificationDTO.fromNotification(notification);
 
-        for (Notification notification : notifications) {
-            userNameSet.add(notification.getUserName());
+        boolean isSucceed = pushService.push(notificationDTO);
+        if (!isSucceed) {
+            log.info("push notification {} to user {} failed", notificationDTO.getMessage(),
+                     notificationDTO.getUserName());
+            return;
         }
 
-        for (String userName : userNameSet) {
-            List<Notification> notificationList = notificationDAO.getByUserName(userName);
-            for (Notification notification : notificationList) {
-                if (!notification.isReaded()) {
-                    push(userName);
-                    break;
-                }
-            }
-        }
+        log.info("push notification {} to user {} success", notificationDTO.getMessage(),
+                 notificationDTO.getUserName());
+        notification.setReaded(true);
+        notification.setReadTime(new Timestamp(System.currentTimeMillis()));
+        notificationDAO.update(notification);
     }
 
-    /**
-     * 为当前用户获取所有未读的通知
-     * @return 未读的通知
-     */
-    public List<NotificationDTO> read() {
-        String userName = UserContextHolder.getUserName();
-        List<Notification> notifications = notificationDAO.getByUserName(userName);
-        List<NotificationDTO> notificationDTOs = new LinkedList<>();
+//    /**
+//     * 检查未读取的通知
+//     */
+//    public void check() {
+//        List<Notification> notifications = notificationDAO.getAll();
+//        Set<String> userNameSet = new HashSet<>();
+//
+//        for (Notification notification : notifications) {
+//            userNameSet.add(notification.getUserName());
+//        }
+//
+//        for (String userName : userNameSet) {
+//            List<Notification> notificationList = notificationDAO.getByUserName(userName);
+//            for (Notification notification : notificationList) {
+//                if (!notification.isReaded()) {
+//                    push(userName);
+//                    break;
+//                }
+//            }
+//        }
+//    }
 
-        log.info("read notifications for user {}", userName);
-        for (Notification notification : notifications) {
-            if (!notification.isReaded()) {
-                notificationDTOs.add(NotificationDTO.fromNotification(notification));
-                notification.setReaded(true);
-                notification.setReadTime(new Timestamp(System.currentTimeMillis()));
-                notificationDAO.update(notification);
-            }
-        }
-
-        return notificationDTOs;
-    }
-
-    /**
-     * 发送推送通知
-     * @param userName 被推送的用户名
-     */
-    public void push(String userName) {
-        log.info("push notification to : {}", userName);
-        // TODO finish push logic
-
-    }
+//    /**
+//     * 为当前用户获取所有未读的通知
+//     * @return 未读的通知
+//     */
+//    public List<NotificationDTO> read() {
+//        String userName = UserContextHolder.getUserName();
+//        List<Notification> notifications = notificationDAO.getByUserName(userName);
+//        List<NotificationDTO> notificationDTOs = new LinkedList<>();
+//
+//        log.info("read notifications for user {}", userName);
+//        for (Notification notification : notifications) {
+//            if (!notification.isReaded()) {
+//                notificationDTOs.add(NotificationDTO.fromNotification(notification));
+//                notification.setReaded(true);
+//                notification.setReadTime(new Timestamp(System.currentTimeMillis()));
+//                notificationDAO.update(notification);
+//            }
+//        }
+//
+//        return notificationDTOs;
+//    }
 
 
     // ====================================== 数据库操作 ====================================== //
@@ -114,15 +125,15 @@ public class NotificationService {
      * @param userName 车辆所属的用户名
      * @param type 通知类型
      */
-    public void create(UUID vehicleId, String userName, NotificationType type, String message) {
-        create(vehicleId, userName, type, null, message);
+    public Notification create(UUID vehicleId, String userName, NotificationType type, String message) {
+        return create(vehicleId, userName, type, null, message);
     }
 
-    public void create(UUID vehicleId, String userName, NotificationType type, int description, String message) {
-        create(vehicleId, userName, type, String.valueOf(description), message);
+    public Notification create(UUID vehicleId, String userName, NotificationType type, int description, String message) {
+        return create(vehicleId, userName, type, String.valueOf(description), message);
     }
 
-    public void create(UUID vehicleId, String userName, NotificationType type, String description, String message) {
+    public Notification create(UUID vehicleId, String userName, NotificationType type, String description, String message) {
         Notification notification = Notification.newInstance()
                 .withId(UUID.randomUUID())
                 .withVehicleId(vehicleId)
@@ -133,6 +144,7 @@ public class NotificationService {
                 .withCreateTime(new Timestamp(System.currentTimeMillis()))
                 .withMessage(message);
         notificationDAO.save(notification);
+        return notification;
     }
 
     /**

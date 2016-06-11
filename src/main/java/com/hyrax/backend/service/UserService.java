@@ -78,7 +78,7 @@ public class UserService {
     public void logout() {
         String userName = UserContextHolder.getUserName();
         pushService.clearPushId(userName);
-        log.info("clear push id for user {}", userName);
+        log.info("clear pushAndUpdate id for user {}", userName);
         log.info("user {} logout", userName);
     }
 
