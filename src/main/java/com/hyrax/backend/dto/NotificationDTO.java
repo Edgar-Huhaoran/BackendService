@@ -15,7 +15,7 @@ public class NotificationDTO {
 
     public static NotificationDTO fromNotification(Notification notification) {
         NotificationDTO notificationDTO = new NotificationDTO();
-        notificationDTO.setVehicleId(notification.getId());
+        notificationDTO.setVehicleId(notification.getVehicleId());
         notificationDTO.setUserName(notification.getUserName());
         notificationDTO.setType(notification.getType());
         notificationDTO.setDescription(notification.getDescription());

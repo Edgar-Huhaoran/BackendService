@@ -70,7 +70,7 @@ public class PushService {
                 .header("Authorization", base64AuthStr)
                 .post(Entity.entity(body, MediaType.APPLICATION_JSON_TYPE));
         if (response.getStatus() != 200) {
-            log.error("something wrong with connect jpush!! but I don't know how to fix it");
+            log.error("something wrong with connect jpush !!!  but I don't know how to fix it: {}", response);
         }
 
         return true;
