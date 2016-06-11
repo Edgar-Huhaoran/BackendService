@@ -33,26 +33,21 @@ public class PushService {
     private final VehicleDAO vehicleDAO;
     private final JPushClient jPushClient;
 
-    @Value("${jpush.path}")
-    private String path;
-    @Value("${jpush.appKey}")
-    private String appKey;
-    @Value("${jpush.masterSecret}")
-    private String masterSecret;
-
-    private String base64AuthStr;
+    private final String path;
+    private final String base64AuthStr;
 
     @Autowired
     public PushService(UserDAO userDAO,
                        VehicleDAO vehicleDAO,
-                       JPushClient jPushClient) {
+                       JPushClient jPushClient,
+                       @Value("${jpush.path}") String path,
+                       @Value("${jpush.appKey}") String appKey,
+                       @Value("${jpush.masterSecret}") String masterSecret) {
         this.userDAO = userDAO;
         this.vehicleDAO = vehicleDAO;
         this.jPushClient = jPushClient;
-    }
 
-    @PostConstruct
-    public void generateAuthorization() {
+        this.path = path;
         String authStr = appKey + ":" + masterSecret;
         base64AuthStr = "Basic " + Base64.getEncoder().encodeToString(authStr.getBytes());
     }
