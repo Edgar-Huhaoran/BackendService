@@ -22,11 +22,15 @@ public class UserService {
 
     private final UserDAO userDAO;
     private final UserTokenService userTokenService;
+    private final PushService pushService;
 
     @Autowired
-    public UserService(UserDAO userDAO, UserTokenService userTokenService) {
+    public UserService(UserDAO userDAO,
+                       UserTokenService userTokenService,
+                       PushService pushService) {
         this.userDAO = userDAO;
         this.userTokenService = userTokenService;
+        this.pushService = pushService;
     }
 
     /**
@@ -67,6 +71,17 @@ public class UserService {
 
         return userTokenService.createUserToken(userDTO.getUserName());
     }
+
+    /**
+     * 登出当前用户
+     */
+    public void logout() {
+        String userName = UserContextHolder.getUserName();
+        pushService.clearPushId(userName);
+        log.info("clear push id for user {}", userName);
+        log.info("user {} logout", userName);
+    }
+
 
     /**
      * 用户注册时的参数验证

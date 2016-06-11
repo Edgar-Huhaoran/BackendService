@@ -25,10 +25,30 @@ public class NotificationService {
     private static Logger log = LoggerFactory.getLogger(NotificationService.class);
 
     private final NotificationDAO notificationDAO;
+    private final PushService pushService;
 
     @Autowired
-    public NotificationService(NotificationDAO notificationDAO) {
+    public NotificationService(NotificationDAO notificationDAO,
+                               PushService pushService) {
         this.notificationDAO = notificationDAO;
+        this.pushService = pushService;
+    }
+
+    /**
+     * 为当前用户注册推送用的ID
+     * @param pushId
+     */
+    public void registerPushId(String pushId) {
+        if (pushId == null || "".equals(pushId)) {
+            log.info("skip push id register, cause of push id is empty");
+            return;
+        }
+
+        String userName = UserContextHolder.getUserName();
+        pushService.setPushId(userName, pushId);
+        log.info("register push id {} for user {}", pushId, userName);
+
+        // TODO : finish push new notification logic
     }
 
     /**

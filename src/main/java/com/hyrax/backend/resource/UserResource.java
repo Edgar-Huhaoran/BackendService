@@ -50,6 +50,13 @@ public class UserResource {
     }
 
     @POST
+    @Path("/logout")
+    public Response login() {
+        userService.logout();
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/loginWithVehicle")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

@@ -24,8 +24,8 @@ public class JdbcUserDAO implements UserDAO {
     }
 
     public int save(User user) {
-        String sql = "INSERT INTO user_account(id, user_name, password, icon, create_time, modify_time) " +
-                "VALUES (:id, :user_name, :password, :icon, :create_time, :modify_time)";
+        String sql = "INSERT INTO user_account(id, user_name, password, icon, create_time, modify_time, push_id) " +
+                "VALUES (:id, :user_name, :password, :icon, :create_time, :modify_time, :push_id)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", user.getId())
@@ -33,8 +33,23 @@ public class JdbcUserDAO implements UserDAO {
                 .addValue("password", user.getPassword())
                 .addValue("icon", user.getIcon())
                 .addValue("create_time", user.getCreateTime())
-                .addValue("modify_time", user.getModifyTime());
+                .addValue("modify_time", user.getModifyTime())
+                .addValue("push_id", user.getPushId());
+        return namedTemplate.update(sql, parameterSource);
+    }
 
+    public int update(User user) {
+        String sql = "UPDATE user_account SET user_name = :user_name, password = :password, icon = :icon, " +
+                "create_time = :create_time, modify_time = :modify_time, push_id = :push_id WHERE id = :id";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", user.getId())
+                .addValue("user_name", user.getUserName())
+                .addValue("password", user.getPassword())
+                .addValue("icon", user.getIcon())
+                .addValue("create_time", user.getCreateTime())
+                .addValue("modify_time", user.getModifyTime())
+                .addValue("push_id", user.getPushId());
         return namedTemplate.update(sql, parameterSource);
     }
 
@@ -70,7 +85,8 @@ public class JdbcUserDAO implements UserDAO {
                     .withPassword(rs.getString("password"))
                     .withIcon(rs.getString("icon"))
                     .withCreateTime(rs.getTimestamp("create_time"))
-                    .withModifyTime(rs.getTimestamp("modify_time"));
+                    .withModifyTime(rs.getTimestamp("modify_time"))
+                    .withPushId(rs.getString("push_id"));
         }
     };
 

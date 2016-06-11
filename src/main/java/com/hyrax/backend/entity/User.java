@@ -11,6 +11,7 @@ public class User {
     private String icon;
     private Timestamp createTime;
     private Timestamp modifyTime;
+    private String pushId;
 
     public UUID getId() {
         return id;
@@ -64,6 +65,14 @@ public class User {
         return new User();
     }
 
+    public String getPushId() {
+        return pushId;
+    }
+
+    public void setPushId(String pushId) {
+        this.pushId = pushId;
+    }
+
     public User withId(UUID id) {
         this.id = id;
         return this;
@@ -91,6 +100,11 @@ public class User {
 
     public User withModifyTime(Timestamp modifyTime) {
         this.modifyTime = modifyTime;
+        return this;
+    }
+
+    public User withPushId(String pushId) {
+        this.pushId = pushId;
         return this;
     }
 

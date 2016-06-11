@@ -8,6 +8,8 @@ public interface UserDAO {
 
     int save(User user);
 
+    int update(User user);
+
     User get(UUID id);
 
     User get(String userName);
