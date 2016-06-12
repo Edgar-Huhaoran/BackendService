@@ -199,7 +199,7 @@ public class VehicleStatusDTO {
         } else if (vehicleStatusDTO.getCleanFluid() < 20) {
             message = "<font color=\"#FFA500\">清洁液低于20%</font>";
         } else {
-            message = "<font color=\"#ff3caa0f\">状态不错哦~ O(∩_∩)O~~</font>";
+            message = "<font color=\"#3caa0f\">状态不错哦~ O(∩_∩)O~~</font>";
         }
 
         vehicleStatusDTO.setMessage(message);
