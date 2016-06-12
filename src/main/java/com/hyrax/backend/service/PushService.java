@@ -97,7 +97,7 @@ public class PushService {
         String message = notificationDTO.getMessage();
 
         JPushDTO.Notification.Android android = new JPushDTO.Notification.Android();
-        android.setAlert(message);
+        android.setAlert(alertMessage(message));
         android.setTitle(vehicleNumber);
         android.setBuilderId(1);
         android.setExtras(notificationDTO);
@@ -115,6 +115,10 @@ public class PushService {
         jPushDTO.setAudience(audience);
         jPushDTO.setNotification(notification);
         return jPushDTO;
+    }
+
+    private String alertMessage(String message) {
+        return message.substring(message.indexOf(">"), message.indexOf("</"));
     }
 
 

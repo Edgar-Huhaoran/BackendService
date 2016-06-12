@@ -189,15 +189,15 @@ public class VehicleStatusDTO {
         } else if (TransmissionState.ABNORMAL.equals(vehicleStatusDTO.getTransmissionState())) {
             message = "<font color=\"#ff0000\">变速器好像有点问题哎~</font>";
         } else if (HeadlightState.ABNORMAL.equals(vehicleStatusDTO.getHeadlightState())) {
-            message = "<font color=\"#ffff00\">呀,车灯坏了...</font>";
+            message = "<font color=\"#FFA500\">呀,车灯坏了...</font>";
         } else if (vehicleStatusDTO.getGasoline() < 20) {
-            message = "<font color=\"#ffff00\">油量低于20% /(ㄒ_ㄒ)/~~</font>";
+            message = "<font color=\"#FFA500\">油量低于20% /(ㄒ_ㄒ)/~~</font>";
         } else if (vehicleStatusDTO.getMileage() - vehicleStatusDTO.getLastMileage() > maintainCycle) {
-            message = "<font color=\"#ffff00\">是时候来一次保养了</font>";
+            message = "<font color=\"#FFA500\">是时候来一次保养了</font>";
         } else if (vehicleStatusDTO.getEngineOil() < 20) {
-            message = "<font color=\"#ffff00\">机油低于20%</font>";
+            message = "<font color=\"#FFA500\">机油低于20%</font>";
         } else if (vehicleStatusDTO.getCleanFluid() < 20) {
-            message = "<font color=\"#ffff00\">清洁液低于20%</font>";
+            message = "<font color=\"#FFA500\">清洁液低于20%</font>";
         } else {
             message = "<font color=\"#ff3caa0f\">状态不错哦~ O(∩_∩)O~~</font>";
         }
