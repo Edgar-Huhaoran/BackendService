@@ -2,11 +2,11 @@ package com.hyrax.backend.entity;
 
 public enum NotificationType {
 
-    FUEL_UNDER("油量低于20%"),
-    MILEAGE_ACHIEVE("里程达到", "公里,需要维护"),
-    ENGINE_ABNORMAL("发动机异常"),
-    TRANSMISSION_ABNORMAL("变速器异常"),
-    HEADLIGHT_ABNORMAL("车灯损坏");
+    FUEL_UNDER("<font color=\"#ff0000\">油量低于20%</font>"),
+    MILEAGE_ACHIEVE("<font color=\"#ffff00\">里程达到", "公里,需要维护</font>"),
+    ENGINE_ABNORMAL("<font color=\"#ff0000\">发动机异常</font>"),
+    TRANSMISSION_ABNORMAL("<font color=\"#ff0000\">变速器异常</font>"),
+    HEADLIGHT_ABNORMAL("<font color=\"#ff0000\">车灯损坏</font>");
 
     private final String[] messages;
 

@@ -185,21 +185,21 @@ public class VehicleStatusDTO {
     public static VehicleStatusDTO generateMessage(VehicleStatusDTO vehicleStatusDTO, int maintainCycle) {
         String message;
         if (EngineState.ABNORMAL.equals(vehicleStatusDTO.getEngineState())) {
-            message = "发动机异常,快去修理吧 =￣ω￣= ";
+            message = "<font color=\"#ff0000\">发动机异常,快去修理吧 =￣ω￣=</font>";
         } else if (TransmissionState.ABNORMAL.equals(vehicleStatusDTO.getTransmissionState())) {
-            message = "变速器好像有点问题哎~";
+            message = "<font color=\"#ff0000\">变速器好像有点问题哎~</font>";
         } else if (HeadlightState.ABNORMAL.equals(vehicleStatusDTO.getHeadlightState())) {
-            message = "呀,车灯坏了...";
+            message = "<font color=\"#ff0000\">呀,车灯坏了...</font>";
         } else if (vehicleStatusDTO.getGasoline() < 20) {
-            message = "油量低于20% /(ㄒ_ㄒ)/~~";
+            message = "<font color=\"#ff0000\">油量低于20% /(ㄒ_ㄒ)/~~</font>";
         } else if (vehicleStatusDTO.getMileage() - vehicleStatusDTO.getLastMileage() > maintainCycle) {
-            message = "是时候来一次保养了";
+            message = "<font color=\"#ffff00\">是时候来一次保养了</font>";
         } else if (vehicleStatusDTO.getEngineOil() < 20) {
-            message = "机油低于20%";
+            message = "<font color=\"#ffff00\">机油低于20%</font>";
         } else if (vehicleStatusDTO.getCleanFluid() < 20) {
-            message = "清洁液低于20%";
+            message = "<font color=\"#ffff00\">清洁液低于20%</font>";
         } else {
-            message = "状态不错哦~ O(∩_∩)O~~";
+            message = "<font color=\"#00ff00\">状态不错哦~ O(∩_∩)O~~</font>";
         }
 
         vehicleStatusDTO.setMessage(message);
