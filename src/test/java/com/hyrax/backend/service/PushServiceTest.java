@@ -29,7 +29,6 @@ public class PushServiceTest extends TestBase {
     private String path;
     private String appKey;
     private String masterSecret;
-    private String base64AuthStr;
 
     private NotificationDTO notificationDTO;
     private User user;
@@ -45,7 +44,6 @@ public class PushServiceTest extends TestBase {
         path ="/v3/push";
         appKey = "8d38df46a12861afbed5e0ec";
         masterSecret = "9b44ca7daa5a0ee602193c3a";
-        base64AuthStr = "Basic OGQzOGRmNDZhMTI4NjFhZmJlZDVlMGVjOjliNDRjYTdkYWE1YTBlZTYwMjE5M2MzYQ==";
 
         notificationDTO = new NotificationDTO();
         user = new User();
