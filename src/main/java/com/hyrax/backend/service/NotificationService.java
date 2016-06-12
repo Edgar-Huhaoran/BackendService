@@ -46,7 +46,7 @@ public class NotificationService {
 
         String userName = UserContextHolder.getUserName();
         pushService.setPushId(userName, pushId);
-        log.info("register pushAndUpdate id {} for user {}", pushId, userName);
+        log.info("register push id {} for user {}", pushId, userName);
 
         List<Notification> notificationList = notificationDAO.getByUserName(userName);
         for (Notification notification : notificationList) {

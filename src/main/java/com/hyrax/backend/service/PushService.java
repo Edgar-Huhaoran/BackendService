@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -65,7 +64,7 @@ public class PushService {
                 .header("Authorization", base64AuthStr)
                 .post(Entity.entity(body, MediaType.APPLICATION_JSON_TYPE));
         if (response.getStatus() != 200) {
-            log.error("something wrong with connect jpush !!!  but I don't know how to fix it: {}", response);
+            log.error("something wrong with jpush request!!! but I don't know how to fix it: {}", response);
         }
 
         return true;
