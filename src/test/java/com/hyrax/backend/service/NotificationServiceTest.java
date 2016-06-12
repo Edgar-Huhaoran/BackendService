@@ -25,9 +25,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class NotificationServiceTest extends TestBase {
 
     @Mock
-    NotificationDAO notificationDAO;
+    private NotificationDAO notificationDAO;
     @Mock
-    PushService pushService;
+    private PushService pushService;
 
     private Notification notification;
     private List<Notification> notificationList;
