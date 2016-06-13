@@ -49,6 +49,14 @@ public class VehicleResource {
         return Response.ok(resultMap).build();
     }
 
+    @GET
+    @Path("/{vehicleId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVehicle(@PathParam("vehicleId") UUID id) {
+        Vehicle vehicle = vehicleService.getVehicle(id);
+        return Response.ok(vehicle).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
