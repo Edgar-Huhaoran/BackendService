@@ -134,7 +134,9 @@ public class VehicleService {
                 vehicleDTO.getModel() == null || vehicleDTO.getModel().isEmpty() ||
                 vehicleDTO.getNumber() == null || vehicleDTO.getNumber().isEmpty() ||
                 vehicleDTO.getEngine() == null || vehicleDTO.getEngine().isEmpty() ||
-                vehicleDTO.getDoorNum() == 0 || vehicleDTO.getSeatNum() == 0) {
+                vehicleDTO.getDoorNum() == 0 || vehicleDTO.getSeatNum() == 0 ||
+                vehicleDTO.getGasCapacity() == 0 || vehicleDTO.getMaintainCycle() == 0 ||
+                vehicleDTO.getCarFrame() == null || vehicleDTO.getCarFrame().isEmpty()) {
             throw new HyraxException(ErrorType.VEHICLE_INFO_INVALID);
         }
 
