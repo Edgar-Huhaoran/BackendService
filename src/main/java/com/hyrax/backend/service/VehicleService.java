@@ -137,6 +137,10 @@ public class VehicleService {
                 vehicleDTO.getDoorNum() == 0 || vehicleDTO.getSeatNum() == 0) {
             throw new HyraxException(ErrorType.VEHICLE_INFO_INVALID);
         }
+
+        if (vehicleDAO.getByVehicleNumber(vehicleDTO.getNumber()) != null) {
+            throw new HyraxException(ErrorType.VEHICLE_NUMBER_EXISTS);
+        }
     }
 
     private void createVehicleStatus(UUID vehicleId, String userName) {

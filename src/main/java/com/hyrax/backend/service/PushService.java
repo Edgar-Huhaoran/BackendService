@@ -118,7 +118,9 @@ public class PushService {
     }
 
     private String alertMessage(String message) {
-        return message.substring(message.indexOf(">") + 1, message.indexOf("</"));
+        String result = message.substring(message.indexOf(">") + 1, message.indexOf("</"));
+        log.info("alter message is:{}", result);
+        return result;
     }
 
 
