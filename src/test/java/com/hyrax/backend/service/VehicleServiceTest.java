@@ -80,6 +80,9 @@ public class VehicleServiceTest extends TestBase {
         vehicleDTO.setEngine("ADC");
         vehicleDTO.setDoorNum(4);
         vehicleDTO.setSeatNum(4);
+        vehicleDTO.setGasCapacity(120);
+        vehicleDTO.setMaintainCycle(15000);
+        vehicleDTO.setCarFrame("12345678");
 
         UserContextHolder.setContext(new UserContext(userName));
         vehicleService.createVehicle(vehicleDTO);

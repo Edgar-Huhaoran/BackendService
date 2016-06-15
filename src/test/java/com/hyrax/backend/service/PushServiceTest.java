@@ -62,6 +62,7 @@ public class PushServiceTest extends TestBase {
     @Test
     public void push_method_should_return_true_if_push_success() {
         user.setPushId("123abc");
+        notificationDTO.setMessage("<font color=\"#ff0000\">message</font>");
         when(userDAO.get(any(String.class))).thenReturn(user);
         when(vehicleDAO.get(any(UUID.class))).thenReturn(vehicle);
 
