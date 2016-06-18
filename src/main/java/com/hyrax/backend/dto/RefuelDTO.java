@@ -3,7 +3,6 @@ package com.hyrax.backend.dto;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import com.hyrax.backend.entity.AmountType;
 import com.hyrax.backend.entity.Refuel;
 import com.hyrax.backend.entity.state.RefuelState;
 
@@ -15,7 +14,7 @@ public class RefuelDTO {
     private String fuelType;
     private double price;
     private double amount;
-    private AmountType amountType;
+    private int amountType;
     private String stationId;
     private String stationName;
     private RefuelState state;
@@ -85,11 +84,11 @@ public class RefuelDTO {
         this.amount = amount;
     }
 
-    public AmountType getAmountType() {
+    public int getAmountType() {
         return amountType;
     }
 
-    public void setAmountType(AmountType amountType) {
+    public void setAmountType(int amountType) {
         this.amountType = amountType;
     }
 

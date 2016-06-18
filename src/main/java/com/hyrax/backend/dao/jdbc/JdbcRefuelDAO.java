@@ -1,7 +1,6 @@
 package com.hyrax.backend.dao.jdbc;
 
 import com.hyrax.backend.dao.RefuelDAO;
-import com.hyrax.backend.entity.AmountType;
 import com.hyrax.backend.entity.Refuel;
 import com.hyrax.backend.entity.state.RefuelState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class JdbcRefuelDAO implements RefuelDAO {
                 .addValue("fuel_type", refuel.getFuelType())
                 .addValue("price", refuel.getPrice())
                 .addValue("amount", refuel.getAmount())
-                .addValue("amount_type", refuel.getAmountType().toString())
+                .addValue("amount_type", refuel.getAmountType())
                 .addValue("station_id", refuel.getStationId())
                 .addValue("station_name", refuel.getStationName())
                 .addValue("state", refuel.getState().toString())
@@ -61,7 +60,7 @@ public class JdbcRefuelDAO implements RefuelDAO {
                 .addValue("fuel_type", refuel.getFuelType())
                 .addValue("price", refuel.getPrice())
                 .addValue("amount", refuel.getAmount())
-                .addValue("amount_type", refuel.getAmountType().toString())
+                .addValue("amount_type", refuel.getAmountType())
                 .addValue("station_id", refuel.getStationId())
                 .addValue("station_name", refuel.getStationName())
                 .addValue("state", refuel.getState().toString())
@@ -101,7 +100,7 @@ public class JdbcRefuelDAO implements RefuelDAO {
                     .withFuelType(rs.getString("fuel_type"))
                     .withPrice(rs.getDouble("price"))
                     .withAmount(rs.getDouble("amount"))
-                    .withAmountType(AmountType.valueOf(rs.getString("amount_type")))
+                    .withAmountType(rs.getInt("amount_type"))
                     .withStationId(rs.getString("station_id"))
                     .withStationName(rs.getString("station_name"))
                     .withState(RefuelState.valueOf(rs.getString("state")))

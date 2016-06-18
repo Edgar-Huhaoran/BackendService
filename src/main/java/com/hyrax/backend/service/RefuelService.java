@@ -93,10 +93,9 @@ public class RefuelService {
     private void verifyAppoint(RefuelDTO refuelDTO) {
         if (refuelDTO.getFuelType() == null || refuelDTO.getFuelType().isEmpty() ||
                 refuelDTO.getPrice() < precision || refuelDTO.getAmount() < precision ||
-                refuelDTO.getAmountType() == null || refuelDTO.getStationId() == null ||
-                refuelDTO.getStationId().isEmpty() || refuelDTO.getStationName() == null ||
-                refuelDTO.getStationName().isEmpty() || refuelDTO.getAppointTime() == null ||
-                refuelDTO.getAppointTime().before(new Timestamp(System.currentTimeMillis()))) {
+                refuelDTO.getStationId() == null || refuelDTO.getStationId().isEmpty() ||
+                refuelDTO.getStationName() == null || refuelDTO.getStationName().isEmpty() ||
+                refuelDTO.getAppointTime() == null || refuelDTO.getAppointTime().before(new Timestamp(System.currentTimeMillis()))) {
             throw new HyraxException(ErrorType.REFUEL_APPOINT_ILLEGAL);
         }
     }

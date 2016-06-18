@@ -10,7 +10,6 @@ import com.hyrax.backend.credential.UserContext;
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.RefuelDAO;
 import com.hyrax.backend.dto.RefuelDTO;
-import com.hyrax.backend.entity.AmountType;
 import com.hyrax.backend.entity.Refuel;
 import com.hyrax.backend.entity.state.RefuelState;
 import com.hyrax.backend.exception.ErrorType;
@@ -71,7 +70,7 @@ public class RefuelServiceTest extends TestBase {
     public void test_appoint_refuel() {
         refuelDTO.setFuelType("#97");
         refuelDTO.setAmount(10);
-        refuelDTO.setAmountType(AmountType.COST);
+        refuelDTO.setAmountType(0);
         refuelDTO.setPrice(10);
         UUID result = refuelService.appointRefuel(refuelDTO);
 

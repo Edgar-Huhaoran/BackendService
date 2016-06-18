@@ -13,7 +13,7 @@ public class Refuel {
     private String fuelType;
     private double price;
     private double amount;
-    private AmountType amountType;
+    private int amountType;
     private String stationId;
     private String stationName;
     private RefuelState state;
@@ -76,11 +76,11 @@ public class Refuel {
         this.amount = amount;
     }
 
-    public AmountType getAmountType() {
+    public int getAmountType() {
         return amountType;
     }
 
-    public void setAmountType(AmountType amountType) {
+    public void setAmountType(int amountType) {
         this.amountType = amountType;
     }
 
@@ -165,7 +165,7 @@ public class Refuel {
         return this;
     }
 
-    public Refuel withAmountType(AmountType amountType) {
+    public Refuel withAmountType(int amountType) {
         this.setAmountType(amountType);
         return this;
     }

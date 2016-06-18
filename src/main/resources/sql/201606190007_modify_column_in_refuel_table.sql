@@ -6,7 +6,7 @@ CREATE TABLE refuel (
     fuel_type varchar(100),
     price double precision,
     amount double precision,
-    amount_type varchar(100),
+    amount_type int,
     station_id varchar(100),
     station_name varchar(100),
     state varchar(100),
