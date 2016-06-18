@@ -70,6 +70,19 @@ public class JdbcVehicleDAO implements VehicleDAO {
         return vehicleList.get(0);
     }
 
+    public Vehicle getByVehicleNumber(String number, String userName) {
+        String sql = "SELECT * FROM vehicle WHERE number = :number AND user_name = :user_name";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("number", number)
+                .addValue("user_name", userName);
+
+        List<Vehicle> vehicleList = namedTemplate.query(sql, parameterSource, VEHICLE_ROW_MAPPER);
+        if (vehicleList.isEmpty()) {
+            return null;
+        }
+        return vehicleList.get(0);
+    }
+
     public List<Vehicle> getByUserName(String userName) {
         String sql = "SELECT * FROM vehicle WHERE user_name = :user_name ORDER BY create_time DESC";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()

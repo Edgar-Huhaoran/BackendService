@@ -140,7 +140,8 @@ public class VehicleService {
             throw new HyraxException(ErrorType.VEHICLE_INFO_INVALID);
         }
 
-        if (vehicleDAO.getByVehicleNumber(vehicleDTO.getNumber()) != null) {
+        String userName = UserContextHolder.getUserName();
+        if (vehicleDAO.getByVehicleNumber(vehicleDTO.getNumber(), userName) != null) {
             throw new HyraxException(ErrorType.VEHICLE_NUMBER_EXISTS);
         }
     }
