@@ -9,15 +9,15 @@ public class Refuel {
 
     private UUID id;
     private String userName;
-    private String ownerName;
-    private Timestamp fromTime;
-    private Timestamp toTime;
+    private String vehicleNumber;
+    private String fuelType;
+    private double price;
+    private double amount;
+    private AmountType amountType;
     private String stationId;
     private String stationName;
-    private String fuelType;
-    private double litre;
-    private double cost;
     private RefuelState state;
+    private Timestamp appointTime;
     private Timestamp createTime;
     private Timestamp modifyTime;
 
@@ -44,28 +44,44 @@ public class Refuel {
         this.userName = userName;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public String getVehicleNumber() {
+        return vehicleNumber;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
     }
 
-    public Timestamp getFromTime() {
-        return fromTime;
+    public String getFuelType() {
+        return fuelType;
     }
 
-    public void setFromTime(Timestamp fromTime) {
-        this.fromTime = fromTime;
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
     }
 
-    public Timestamp getToTime() {
-        return toTime;
+    public double getPrice() {
+        return price;
     }
 
-    public void setToTime(Timestamp toTime) {
-        this.toTime = toTime;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public AmountType getAmountType() {
+        return amountType;
+    }
+
+    public void setAmountType(AmountType amountType) {
+        this.amountType = amountType;
     }
 
     public String getStationId() {
@@ -84,36 +100,20 @@ public class Refuel {
         this.stationName = stationName;
     }
 
-    public String getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public double getLitre() {
-        return litre;
-    }
-
-    public void setLitre(double litre) {
-        this.litre = litre;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
     public RefuelState getState() {
         return state;
     }
 
     public void setState(RefuelState state) {
         this.state = state;
+    }
+
+    public Timestamp getAppointTime() {
+        return appointTime;
+    }
+
+    public void setAppointTime(Timestamp appointTime) {
+        this.appointTime = appointTime;
     }
 
     public Timestamp getCreateTime() {
@@ -132,30 +132,41 @@ public class Refuel {
         this.modifyTime = modifyTime;
     }
 
+
+
+    // with method
     public Refuel withId(UUID id) {
         this.setId(id);
         return this;
     }
 
-
-    // with method
     public Refuel withUserName(String userName) {
         this.setUserName(userName);
         return this;
     }
 
-    public Refuel withOwnerName(String ownerName) {
-        this.setOwnerName(ownerName);
+    public Refuel withVehicleNumber(String vehicleNumber) {
+        this.setVehicleNumber(vehicleNumber);
         return this;
     }
 
-    public Refuel withFromTime(Timestamp fromTime) {
-        this.setFromTime(fromTime);
+    public Refuel withFuelType(String refuelType) {
+        this.setFuelType(refuelType);
         return this;
     }
 
-    public Refuel withToTime(Timestamp toTime) {
-        this.setToTime(toTime);
+    public Refuel withPrice(double price) {
+        this.setPrice(price);
+        return this;
+    }
+
+    public Refuel withAmount(double amount) {
+        this.setAmount(amount);
+        return this;
+    }
+
+    public Refuel withAmountType(AmountType amountType) {
+        this.setAmountType(amountType);
         return this;
     }
 
@@ -169,23 +180,13 @@ public class Refuel {
         return this;
     }
 
-    public Refuel withFuelType(String fuelType) {
-        this.setFuelType(fuelType);
-        return this;
-    }
-
-    public Refuel withLitre(double litre) {
-        this.setLitre(litre);
-        return this;
-    }
-
-    public Refuel withCost(double cost) {
-        this.setCost(cost);
-        return this;
-    }
-
     public Refuel withState(RefuelState state) {
         this.setState(state);
+        return this;
+    }
+
+    public Refuel withAppointTime(Timestamp appointTime) {
+        this.setAppointTime(appointTime);
         return this;
     }
 
@@ -198,4 +199,5 @@ public class Refuel {
         this.setModifyTime(modifyTime);
         return this;
     }
+
 }

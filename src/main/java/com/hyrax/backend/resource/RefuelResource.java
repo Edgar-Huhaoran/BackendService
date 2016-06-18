@@ -46,9 +46,9 @@ public class RefuelResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRefuels() {
-        List<Refuel> refuelList = refuelService.getRefuels();
+        List<RefuelDTO> refuelDTOList = refuelService.getRefuels();
         Map resultMap = new HashMap<>();
-        resultMap.put("refuelList", refuelList);
+        resultMap.put("refuelDTOList", refuelDTOList);
         return Response.ok(resultMap).build();
     }
 
@@ -56,10 +56,8 @@ public class RefuelResource {
     @Path("/{refuelId}/testApi")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateRefuel(@PathParam("refuelId") UUID id,
-                                 @QueryParam("litre") double litre,
-                                 @QueryParam("cost") double cost,
                                  @QueryParam("state") RefuelState refuelState) {
-        refuelService.updateRefuel(id, litre, cost, refuelState);
+        refuelService.updateRefuel(id, refuelState);
         return Response.ok().build();
     }
 }

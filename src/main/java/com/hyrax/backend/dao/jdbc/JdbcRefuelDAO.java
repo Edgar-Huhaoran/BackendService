@@ -1,6 +1,7 @@
 package com.hyrax.backend.dao.jdbc;
 
 import com.hyrax.backend.dao.RefuelDAO;
+import com.hyrax.backend.entity.AmountType;
 import com.hyrax.backend.entity.Refuel;
 import com.hyrax.backend.entity.state.RefuelState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,23 +26,23 @@ public class JdbcRefuelDAO implements RefuelDAO {
     }
 
     public int save(Refuel refuel) {
-        String sql = "INSERT INTO refuel(id, user_name, owner_name, from_time, to_time, station_id, station_name, " +
-                "fuel_type, litre, cost, state, create_time, modify_time) " +
-                "VALUES (:id, :user_name, :owner_name, :from_time, :to_time, :station_id, :station_name, " +
-                ":fuel_type, :litre, :cost, :state, :create_time, :modify_time)";
+        String sql = "INSERT INTO refuel(id, user_name, vehicle_number, fuel_type, price, amount, amount_type, " +
+                "station_id, station_name, state, appoint_time, create_time, modify_time) " +
+                "VALUES (:id, :user_name, :vehicle_number, :fuel_type, :price, :amount, :amount_type, " +
+                ":station_id, :station_name, :state, :appoint_time, :create_time, :modify_time)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", refuel.getId())
                 .addValue("user_name", refuel.getUserName())
-                .addValue("owner_name", refuel.getOwnerName())
-                .addValue("from_time", refuel.getFromTime())
-                .addValue("to_time", refuel.getToTime())
+                .addValue("vehicle_number", refuel.getVehicleNumber())
+                .addValue("fuel_type", refuel.getFuelType())
+                .addValue("price", refuel.getPrice())
+                .addValue("amount", refuel.getAmount())
+                .addValue("amount_type", refuel.getAmountType().toString())
                 .addValue("station_id", refuel.getStationId())
                 .addValue("station_name", refuel.getStationName())
-                .addValue("fuel_type", refuel.getFuelType())
-                .addValue("litre", refuel.getLitre())
-                .addValue("cost", refuel.getCost())
                 .addValue("state", refuel.getState().toString())
+                .addValue("appoint_time", refuel.getAppointTime())
                 .addValue("create_time", refuel.getCreateTime())
                 .addValue("modify_time", refuel.getModifyTime());
 
@@ -49,22 +50,22 @@ public class JdbcRefuelDAO implements RefuelDAO {
     }
 
     public int update(Refuel refuel) {
-        String sql = "UPDATE refuel SET user_name = :user_name, owner_name = :owner_name, from_time = :from_time, " +
-                "to_time = :to_time, station_id = :station_id, station_name = :station_name, fuel_type = :fuel_type, " +
-                "litre = :litre, cost = :cost, state = :state, modify_time = :modify_time WHERE id = :id";
+        String sql = "UPDATE refuel SET user_name = :user_name, vehicle_number = :vehicle_number, fuel_type = :fuel_type, " +
+                "price = :price, amount = :amount, amount_type = :amount_type, station_id = :station_id, station_name = :station_name, " +
+                "state = :state, appoint_time = :appoint_time, modify_time = :modify_time WHERE id = :id";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", refuel.getId())
                 .addValue("user_name", refuel.getUserName())
-                .addValue("owner_name", refuel.getOwnerName())
-                .addValue("from_time", refuel.getFromTime())
-                .addValue("to_time", refuel.getToTime())
+                .addValue("vehicle_number", refuel.getVehicleNumber())
+                .addValue("fuel_type", refuel.getFuelType())
+                .addValue("price", refuel.getPrice())
+                .addValue("amount", refuel.getAmount())
+                .addValue("amount_type", refuel.getAmountType().toString())
                 .addValue("station_id", refuel.getStationId())
                 .addValue("station_name", refuel.getStationName())
-                .addValue("fuel_type", refuel.getFuelType())
-                .addValue("litre", refuel.getLitre())
-                .addValue("cost", refuel.getCost())
                 .addValue("state", refuel.getState().toString())
+                .addValue("appoint_time", refuel.getAppointTime())
                 .addValue("modify_time", refuel.getModifyTime());
 
         return namedTemplate.update(sql, parameterSource);
@@ -96,15 +97,15 @@ public class JdbcRefuelDAO implements RefuelDAO {
             return Refuel.newInstance()
                     .withId(UUID.fromString(rs.getString("id")))
                     .withUserName(rs.getString("user_name"))
-                    .withOwnerName(rs.getString("owner_name"))
-                    .withFromTime(rs.getTimestamp("from_time"))
-                    .withToTime(rs.getTimestamp("to_time"))
+                    .withVehicleNumber(rs.getString("vehicle_number"))
+                    .withFuelType(rs.getString("fuel_type"))
+                    .withPrice(rs.getDouble("price"))
+                    .withAmount(rs.getDouble("amount"))
+                    .withAmountType(AmountType.valueOf(rs.getString("amount_type")))
                     .withStationId(rs.getString("station_id"))
                     .withStationName(rs.getString("station_name"))
-                    .withFuelType(rs.getString("fuel_type"))
-                    .withLitre(rs.getDouble("litre"))
-                    .withCost(rs.getDouble("cost"))
                     .withState(RefuelState.valueOf(rs.getString("state")))
+                    .withAppointTime(rs.getTimestamp("appoint_time"))
                     .withCreateTime(rs.getTimestamp("create_time"))
                     .withModifyTime(rs.getTimestamp("modify_time"));
         }

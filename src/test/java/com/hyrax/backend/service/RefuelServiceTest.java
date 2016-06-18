@@ -10,6 +10,7 @@ import com.hyrax.backend.credential.UserContext;
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.RefuelDAO;
 import com.hyrax.backend.dto.RefuelDTO;
+import com.hyrax.backend.entity.AmountType;
 import com.hyrax.backend.entity.Refuel;
 import com.hyrax.backend.entity.state.RefuelState;
 import com.hyrax.backend.exception.ErrorType;
@@ -41,9 +42,7 @@ public class RefuelServiceTest extends TestBase {
         refuelDTO = new RefuelDTO();
         refuelService = new RefuelService(refuelDAO);
 
-        refuelDTO.setOwnerName("ownerName");
-        refuelDTO.setFromTime(new Timestamp(System.currentTimeMillis() + 10000));
-        refuelDTO.setToTime(new Timestamp(System.currentTimeMillis() + 20000));
+        refuelDTO.setAppointTime(new Timestamp(System.currentTimeMillis() + 10000));
         refuelDTO.setStationId("stationId");
         refuelDTO.setStationName("stationName");
         refuelDTO.setFuelType("fuelType");
@@ -70,7 +69,10 @@ public class RefuelServiceTest extends TestBase {
 
     @Test
     public void test_appoint_refuel() {
-        refuelDTO.setFuelType("fuelType");
+        refuelDTO.setFuelType("#97");
+        refuelDTO.setAmount(10);
+        refuelDTO.setAmountType(AmountType.COST);
+        refuelDTO.setPrice(10);
         UUID result = refuelService.appointRefuel(refuelDTO);
 
         verify(refuelDAO).save(any(Refuel.class));
@@ -84,7 +86,7 @@ public class RefuelServiceTest extends TestBase {
         UserContextHolder.setContext(new UserContext(userName));
         when(refuelDAO.getByUserName(userName)).thenReturn(refuelList);
 
-        List<Refuel> result = refuelService.getRefuels();
+        List<RefuelDTO> result = refuelService.getRefuels();
 
         assertEquals(refuelList, result);
     }
@@ -94,7 +96,7 @@ public class RefuelServiceTest extends TestBase {
         UUID refuelId = UUID.randomUUID();
         when(refuelDAO.get(refuelId)).thenReturn(refuel);
 
-        refuelService.updateRefuel(refuelId, 0, 0, RefuelState.ACCEPTED);
+        refuelService.updateRefuel(refuelId, RefuelState.ACCEPTED);
 
         verify(refuelDAO).update(refuel);
     }

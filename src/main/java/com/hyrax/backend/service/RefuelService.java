@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class RefuelService {
 
     private static Logger log = LoggerFactory.getLogger(RefuelService.class);
+    private static double precision = 0.000001;
 
     private final RefuelDAO refuelDAO;
 
@@ -42,13 +44,15 @@ public class RefuelService {
         Refuel refuel = Refuel.newInstance()
                 .withId(id)
                 .withUserName(userName)
-                .withOwnerName(refuelDTO.getOwnerName())
-                .withFromTime(refuelDTO.getFromTime())
-                .withToTime(refuelDTO.getToTime())
+                .withVehicleNumber(refuelDTO.getVehicleNumber())
+                .withFuelType(refuelDTO.getFuelType())
+                .withPrice(refuelDTO.getPrice())
+                .withAmount(refuelDTO.getAmount())
+                .withAmountType(refuelDTO.getAmountType())
                 .withStationId(refuelDTO.getStationId())
                 .withStationName(refuelDTO.getStationName())
-                .withFuelType(refuelDTO.getFuelType())
                 .withState(RefuelState.REQUESTED)
+                .withAppointTime(refuelDTO.getAppointTime())
                 .withCreateTime(new Timestamp(System.currentTimeMillis()));
         refuelDAO.save(refuel);
         return id;
@@ -58,26 +62,27 @@ public class RefuelService {
      * 获取当前用户所有的加油预约
      * @return
      */
-    public List<Refuel> getRefuels() {
+    public List<RefuelDTO> getRefuels() {
         String userName = UserContextHolder.getUserName();
         log.info("get refuels for user:{}", userName);
-        return refuelDAO.getByUserName(userName);
+
+        List<RefuelDTO> refuelDTOList = new ArrayList<>();
+        List<Refuel> refuelList = refuelDAO.getByUserName(userName);
+        for (Refuel refuel : refuelList) {
+            refuelDTOList.add(RefuelDTO.fromRefuel(refuel));
+        }
+        return refuelDTOList;
     }
 
     /**
      * 更新加油预约的数据
      * @param id 被更新的数据ID
-     * @param litre 油量
-     * @param cost 花费
      * @param refuelState 接受状态
      */
-    public void updateRefuel(UUID id, double litre, double cost, RefuelState refuelState) {
-        log.info("update refuel {} with liter:{}, cost:{}, refuelState:{}", id, litre, cost, refuelState);
+    public void updateRefuel(UUID id, RefuelState refuelState) {
+        log.info("update refuel {} set refuelState:{}", id, refuelState);
         Refuel refuel = refuelDAO.get(id);
-        refuel.withLitre(litre)
-                .withCost(cost)
-                .withState(refuelState)
-                .withModifyTime(new Timestamp(System.currentTimeMillis()));
+        refuel.withState(refuelState).withModifyTime(new Timestamp(System.currentTimeMillis()));
         refuelDAO.update(refuel);
     }
 
@@ -86,12 +91,12 @@ public class RefuelService {
      * @param refuelDTO
      */
     private void verifyAppoint(RefuelDTO refuelDTO) {
-        if (refuelDTO.getOwnerName() == null || refuelDTO.getOwnerName().isEmpty() ||
-                refuelDTO.getFromTime() == null || refuelDTO.getFromTime().before(new Timestamp(System.currentTimeMillis())) ||
-                refuelDTO.getToTime() == null || refuelDTO.getToTime().before(refuelDTO.getFromTime()) ||
-                refuelDTO.getStationId() == null || refuelDTO.getStationId().isEmpty() ||
-                refuelDTO.getStationName() == null || refuelDTO.getStationName().isEmpty() ||
-                refuelDTO.getFuelType() == null || refuelDTO.getFuelType().isEmpty()) {
+        if (refuelDTO.getFuelType() == null || refuelDTO.getFuelType().isEmpty() ||
+                refuelDTO.getPrice() < precision || refuelDTO.getAmount() < precision ||
+                refuelDTO.getAmountType() == null || refuelDTO.getStationId() == null ||
+                refuelDTO.getStationId().isEmpty() || refuelDTO.getStationName() == null ||
+                refuelDTO.getStationName().isEmpty() || refuelDTO.getAppointTime() == null ||
+                refuelDTO.getAppointTime().before(new Timestamp(System.currentTimeMillis()))) {
             throw new HyraxException(ErrorType.REFUEL_APPOINT_ILLEGAL);
         }
     }
