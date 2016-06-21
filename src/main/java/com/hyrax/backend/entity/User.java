@@ -12,6 +12,7 @@ public class User {
     private Timestamp createTime;
     private Timestamp modifyTime;
     private String pushId;
+    private String fullName;
 
     public UUID getId() {
         return id;
@@ -73,6 +74,14 @@ public class User {
         this.pushId = pushId;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public User withId(UUID id) {
         this.id = id;
         return this;
@@ -105,6 +114,11 @@ public class User {
 
     public User withPushId(String pushId) {
         this.pushId = pushId;
+        return this;
+    }
+
+    public User withFullName(String fullName) {
+        this.fullName = fullName;
         return this;
     }
 

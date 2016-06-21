@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,32 +25,33 @@ public class JdbcUserDAO implements UserDAO {
     }
 
     public int save(User user) {
-        String sql = "INSERT INTO user_account(id, user_name, password, icon, create_time, modify_time, push_id) " +
-                "VALUES (:id, :user_name, :password, :icon, :create_time, :modify_time, :push_id)";
+        String sql = "INSERT INTO user_account(id, user_name, password, icon, create_time, modify_time, push_id, full_name) " +
+                "VALUES (:id, :user_name, :password, :icon, :create_time, :modify_time, :push_id, :full_name)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("user_name", user.getUserName())
                 .addValue("password", user.getPassword())
                 .addValue("icon", user.getIcon())
-                .addValue("create_time", user.getCreateTime())
-                .addValue("modify_time", user.getModifyTime())
-                .addValue("push_id", user.getPushId());
+                .addValue("create_time", new Timestamp(System.currentTimeMillis()))
+                .addValue("modify_time", null)
+                .addValue("push_id", user.getPushId())
+                .addValue("full_name", user.getFullName());
         return namedTemplate.update(sql, parameterSource);
     }
 
     public int update(User user) {
         String sql = "UPDATE user_account SET user_name = :user_name, password = :password, icon = :icon, " +
-                "create_time = :create_time, modify_time = :modify_time, push_id = :push_id WHERE id = :id";
+                "modify_time = :modify_time, push_id = :push_id, full_name = :full_name WHERE id = :id";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("user_name", user.getUserName())
                 .addValue("password", user.getPassword())
                 .addValue("icon", user.getIcon())
-                .addValue("create_time", user.getCreateTime())
-                .addValue("modify_time", user.getModifyTime())
-                .addValue("push_id", user.getPushId());
+                .addValue("modify_time", new Timestamp(System.currentTimeMillis()))
+                .addValue("push_id", user.getPushId())
+                .addValue("full_name", user.getFullName());
         return namedTemplate.update(sql, parameterSource);
     }
 
@@ -86,7 +88,8 @@ public class JdbcUserDAO implements UserDAO {
                     .withIcon(rs.getString("icon"))
                     .withCreateTime(rs.getTimestamp("create_time"))
                     .withModifyTime(rs.getTimestamp("modify_time"))
-                    .withPushId(rs.getString("push_id"));
+                    .withPushId(rs.getString("push_id"))
+                    .withFullName(rs.getString("full_name"));
         }
     };
 

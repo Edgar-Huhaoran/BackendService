@@ -4,6 +4,7 @@ import com.hyrax.backend.credential.UserContext;
 import com.hyrax.backend.credential.UserContextHolder;
 import com.hyrax.backend.dao.UserDAO;
 import com.hyrax.backend.dto.UserDTO;
+import com.hyrax.backend.dto.UserDetailDTO;
 import com.hyrax.backend.entity.User;
 import com.hyrax.backend.exception.ErrorType;
 import com.hyrax.backend.exception.HyraxException;
@@ -44,9 +45,7 @@ public class UserService {
         User user = User.newInstance()
                 .withId(UUID.randomUUID())
                 .withUserName(userDTO.getUserName())
-                .withPassword(userDTO.getPassword())
-                .withCreateTime(new Timestamp(System.currentTimeMillis()))
-                .withModifyTime(new Timestamp(System.currentTimeMillis()));
+                .withPassword(userDTO.getPassword());
         userDAO.save(user);
     }
 
@@ -82,6 +81,50 @@ public class UserService {
         log.info("user {} logout", userName);
     }
 
+    /**
+     * 获取当前用户的详细信息
+     * @return
+     */
+    public UserDetailDTO getUserDetail() {
+        String userName = UserContextHolder.getUserName();
+        log.info("get user detail by user name {}", userName);
+
+        User user = userDAO.get(userName);
+        UserDetailDTO userDetailDTO = UserDetailDTO.fromUser(user);
+        return userDetailDTO;
+    }
+
+    /**
+     * 修改用户的数据
+     * @param userDTO
+     */
+    public void modifyUserDetail(UserDTO userDTO) {
+        modifyValidate(userDTO);
+        String userName = UserContextHolder.getUserName();
+        log.info("modify data for user {}", userName);
+
+        User user = userDAO.get(userName);
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPassword(userDTO.getPassword());
+            log.info("set password {} for user {}", userDTO.getPassword(), userName);
+        }
+        if (userDTO.getFullName() != null && !userDTO.getFullName().isEmpty()) {
+            user.setFullName(userDTO.getFullName());
+            log.info("set full name {} for user {}", userDTO.getFullName(), userName);
+        }
+        userDAO.update(user);
+    }
+
+    /**
+     * 修改用户数据时的数据验证
+     * @param userDTO
+     */
+    private void modifyValidate(UserDTO userDTO) {
+        if ((userDTO.getFullName() == null || userDTO.getFullName().isEmpty()) &&
+                (userDTO.getPassword() == null || userDTO.getPassword().isEmpty())) {
+            throw new HyraxException(ErrorType.MODIFY_DATA_EMPTY);
+        }
+    }
 
     /**
      * 用户注册时的参数验证

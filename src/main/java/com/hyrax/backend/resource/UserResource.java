@@ -1,6 +1,7 @@
 package com.hyrax.backend.resource;
 
 import com.hyrax.backend.dto.UserDTO;
+import com.hyrax.backend.dto.UserDetailDTO;
 import com.hyrax.backend.entity.Vehicle;
 import com.hyrax.backend.service.UserService;
 import com.hyrax.backend.service.VehicleService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -50,13 +52,6 @@ public class UserResource {
     }
 
     @POST
-    @Path("/logout")
-    public Response login() {
-        userService.logout();
-        return Response.ok().build();
-    }
-
-    @POST
     @Path("/loginWithVehicle")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -68,6 +63,29 @@ public class UserResource {
         resultMap.put("userToken", token);
         resultMap.put("vehicleList", vehicleList);
         return Response.ok(resultMap).build();
+    }
+
+    @POST
+    @Path("/logout")
+    public Response login() {
+        userService.logout();
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/detail")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserDetail() {
+        UserDetailDTO userDetailDTO = userService.getUserDetail();
+        return Response.ok(userDetailDTO).build();
+    }
+
+    @POST
+    @Path("/detail")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response modifyUserDetail(UserDTO userDTO) {
+        userService.modifyUserDetail(userDTO);
+        return Response.ok().build();
     }
 
 }
