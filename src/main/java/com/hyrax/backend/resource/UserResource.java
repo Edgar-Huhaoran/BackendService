@@ -12,6 +12,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -86,6 +87,22 @@ public class UserResource {
     public Response modifyUserDetail(UserDTO userDTO) {
         userService.modifyUserDetail(userDTO);
         return Response.ok().build();
+    }
+
+    @POST
+    @Path("/icon")
+    @Consumes({"image/png", "image/jpg"})
+    public Response uploadUserIcon(byte[] iconBytes) {
+        userService.setIcon(iconBytes);
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/icon/{iconName}/noToken")
+    @Produces("image/png")
+    public Response getUserIcon(@PathParam("iconName") String iconName) {
+        byte[] imageBytes = userService.getIcon(iconName);
+        return Response.ok(imageBytes).build();
     }
 
 }

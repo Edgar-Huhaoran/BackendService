@@ -16,6 +16,7 @@ public enum ErrorType {
     VEHICLE_BRAND_NOT_EXISTS(HttpStatus.BAD_REQUEST, 40010, "vehicle brand is not exists", "汽车品牌不存在"),
     VEHICLE_NUMBER_EXISTS(HttpStatus.BAD_REQUEST, 40011, "vehicle number already exists", "车牌号已存在"),
     MODIFY_DATA_EMPTY(HttpStatus.BAD_REQUEST, 40012, "modified data is empty", "修改内容不能为空"),
+    UPLOAD_ICON_FAILED(HttpStatus.BAD_REQUEST, 40013, "upload user icon failed", "用户头像上传失败"),
 
     TOKEN_NOT_EXISTS(HttpStatus.FORBIDDEN, 4031, "user token do not exists", "token不存在"),
     TOKEN_INVALID(HttpStatus.FORBIDDEN, 4032, "user token is invalid", "token无效"),

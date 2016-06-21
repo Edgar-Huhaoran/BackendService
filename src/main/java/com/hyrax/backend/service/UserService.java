@@ -13,13 +13,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 @Service
 public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final String ICON_FILE_NAME = "icon";
 
     private final UserDAO userDAO;
     private final UserTokenService userTokenService;
@@ -113,6 +121,53 @@ public class UserService {
             log.info("set full name {} for user {}", userDTO.getFullName(), userName);
         }
         userDAO.update(user);
+    }
+
+    public void setIcon(byte[] imageBytes) {
+        String userName = UserContextHolder.getUserName();
+
+        try {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
+
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File iconDir = new File(new File(classLoader.getResource("application.properties").getFile())
+                    .getParentFile(), ICON_FILE_NAME);
+            if (!iconDir.exists()){
+                iconDir.mkdir();
+            }
+            File imageFile = new File(iconDir, userName + ".png");
+            if (!imageFile.exists()){
+                imageFile.createNewFile();
+            }
+
+            ImageIO.write(bufferedImage, "png", imageFile);
+            log.info("save icon to {}, for user {}", imageFile.getAbsolutePath(), userName);
+        } catch (IOException | IllegalArgumentException | NullPointerException e) {
+            log.warn("set user icon failed ", e);
+            throw new HyraxException(ErrorType.UPLOAD_ICON_FAILED);
+        }
+    }
+
+    public byte[] getIcon(String iconName) {
+        try {
+            log.info("try to get icon {}", iconName);
+            String applicationPath = this.getClass().getClassLoader().getResource("application.properties").getFile();
+            File iconDir = new File(new File(applicationPath).getParentFile(), ICON_FILE_NAME);
+            File imageFile = new File(iconDir, iconName);
+            if (!imageFile.exists()) {
+                log.warn("can not find icon {}", iconName);
+                return null;
+            }
+
+            BufferedImage bufferedImage = ImageIO.read(imageFile);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", bos);
+            return bos.toByteArray();
+        } catch (IOException | IllegalArgumentException | NullPointerException e) {
+            log.warn("get user icon failed ", e);
+            throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
+        }
     }
 
     /**
