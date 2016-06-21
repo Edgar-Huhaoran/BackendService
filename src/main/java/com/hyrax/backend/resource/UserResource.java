@@ -92,9 +92,12 @@ public class UserResource {
     @POST
     @Path("/icon")
     @Consumes({"image/png", "image/jpg"})
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadUserIcon(byte[] iconBytes) {
-        userService.setIcon(iconBytes);
-        return Response.ok().build();
+        String iconUrl = userService.setIcon(iconBytes);
+        Map resultMap = new HashMap<>();
+        resultMap.put("iconUrl", iconUrl);
+        return Response.ok(resultMap).build();
     }
 
     @GET

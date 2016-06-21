@@ -11,6 +11,7 @@ import com.hyrax.backend.exception.HyraxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
@@ -27,11 +28,15 @@ import javax.imageio.ImageIO;
 public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final String ICON_RESOURCE_URL = "/user/icon";
     private static final String ICON_FILE_NAME = "icon";
 
     private final UserDAO userDAO;
     private final UserTokenService userTokenService;
     private final PushService pushService;
+
+    @Value("${hyrax.server.address}")
+    private String serverAddress;
 
     @Autowired
     public UserService(UserDAO userDAO,
@@ -123,16 +128,24 @@ public class UserService {
         userDAO.update(user);
     }
 
-    public void setIcon(byte[] imageBytes) {
+    /**
+     * 设置用户的头像
+     * @param imageBytes
+     */
+    public String setIcon(byte[] imageBytes) {
         String userName = UserContextHolder.getUserName();
 
         try {
+            if (imageBytes == null || imageBytes.length == 0) {
+                throw new IllegalArgumentException("upload image is empty");
+            }
+
             InputStream inputStream = new ByteArrayInputStream(imageBytes);
             BufferedImage bufferedImage = ImageIO.read(inputStream);
 
             ClassLoader classLoader = this.getClass().getClassLoader();
             File iconDir = new File(new File(classLoader.getResource("application.properties").getFile())
-                    .getParentFile(), ICON_FILE_NAME);
+                    .getParentFile().getParentFile().getParentFile(), ICON_FILE_NAME);
             if (!iconDir.exists()){
                 iconDir.mkdir();
             }
@@ -143,17 +156,26 @@ public class UserService {
 
             ImageIO.write(bufferedImage, "png", imageFile);
             log.info("save icon to {}, for user {}", imageFile.getAbsolutePath(), userName);
+
+            String iconUrl = setIconUrl();
+            return iconUrl;
         } catch (IOException | IllegalArgumentException | NullPointerException e) {
             log.warn("set user icon failed ", e);
             throw new HyraxException(ErrorType.UPLOAD_ICON_FAILED);
         }
     }
 
+    /**
+     * 获取用户的头像
+     * @param iconName
+     * @return
+     */
     public byte[] getIcon(String iconName) {
         try {
             log.info("try to get icon {}", iconName);
             String applicationPath = this.getClass().getClassLoader().getResource("application.properties").getFile();
-            File iconDir = new File(new File(applicationPath).getParentFile(), ICON_FILE_NAME);
+            File iconDir = new File(new File(applicationPath).getParentFile().getParentFile().getParentFile(),
+                                    ICON_FILE_NAME);
             File imageFile = new File(iconDir, iconName);
             if (!imageFile.exists()) {
                 log.warn("can not find icon {}", iconName);
@@ -168,6 +190,20 @@ public class UserService {
             log.warn("get user icon failed ", e);
             throw new HyraxException(ErrorType.RESOURCE_NOT_FOUND);
         }
+    }
+
+    /**
+     * 将用户头像的链接保存到数据库
+     * @return
+     */
+    private String setIconUrl() {
+        String userName = UserContextHolder.getUserName();
+        String iconUrl = serverAddress + ICON_RESOURCE_URL + "/" + userName + ".png/noToken";
+
+        User user = userDAO.get(userName);
+        user.setIcon(iconUrl);
+        userDAO.update(user);
+        return iconUrl;
     }
 
     /**
